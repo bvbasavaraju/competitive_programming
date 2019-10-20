@@ -237,6 +237,81 @@ public:
     s.length is a multiple of 4
     s contains only 'Q', 'W', 'E' and 'R'
 */
+class Solution3_t
+{
+    //TODO: Solution is wrong. My understanding of the question is wrong.
+public:
+    int balancedString(string s)
+    {
+        int sLength = s.length();
+        if ((sLength % 4) != 0)
+        {
+            return -1;
+        }
+
+        int subStrLength = 4;
+        int balanceCountInSubStr = 1;
+        const char *sInCStr = s.c_str();
+
+        int retVal = 0;
+        for (int count = 0; count < sLength; count = count + subStrLength)
+        {
+            int qCount = 0;
+            int wCount = 0;
+            int eCount = 0;
+            int rCount = 0;
+            for (int i = 0; i < subStrLength; i++)
+            {
+                bool withinBalance = false;
+                switch (sInCStr[i + count])
+                {
+                case 'Q':
+                    if (qCount < balanceCountInSubStr)
+                    {
+                        withinBalance = true;
+                        qCount++;
+                    }
+                    break;
+
+                case 'W':
+                    if (wCount < balanceCountInSubStr)
+                    {
+                        withinBalance = true;
+                        wCount++;
+                    }
+                    break;
+
+                case 'E':
+                    if (eCount < balanceCountInSubStr)
+                    {
+                        withinBalance = true;
+                        eCount++;
+                    }
+                    break;
+
+                case 'R':
+                    if (rCount < balanceCountInSubStr)
+                    {
+                        withinBalance = true;
+                        rCount++;
+                    }
+                    break;
+
+                default:
+                    printf("Error\n");
+                    break;
+                }
+
+                if (withinBalance != true)
+                {
+                    retVal++;
+                }
+            }
+        }
+
+        return retVal;
+    }
+};
 
 /*
     Q: 1235. Maximum Profit in Job Scheduling
@@ -274,6 +349,10 @@ int main(void)
         Solution2_t s;
         vector<string> input = {"/a", "/a/b/c", "/a/b/d"}; //{"/a", "/a/b", "/c/d", "/c/d/e", "/c/f"}; // {"/a/b/c", "/a/b/ca", "/a/b/d"};
         vector<string> result = s.removeSubfolders(input);
+    }
+    {
+        Solution3_t s;
+        int replaceCount = s.balancedString("WWEQERQWQWWRWWERQWEQ");
     }
     return 0;
 }
