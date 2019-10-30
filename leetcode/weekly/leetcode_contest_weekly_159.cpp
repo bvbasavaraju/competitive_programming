@@ -352,7 +352,8 @@ int main(void)
     }
     {
         Solution3_t s;
-        int replaceCount = s.balancedString("WWEQ ERQW QWWR WWER QWEQ");
+        //int replaceCount = s.balancedString("WWEQERQWQWWRWWERQWEQ"); // Ans = 4
+        int replaceCount = s.balancedString("WWQQRRRRQRQQ"); //Ans = 4
     }
     return 0;
 }
