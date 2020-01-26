@@ -7,7 +7,7 @@ Wrong Answer/ Partial result : 0
 
 Note: I was on vacation. Been to hometown for Makara Sankranti festival.
 
-link: https://leetcode.com/contest/biweekly-contest-171
+link: https://leetcode.com/contest/biweekly-contest-172
 ****************************************************/
 
 #include <iostream>
