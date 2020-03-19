@@ -77,9 +77,23 @@ public:
 };
 
 /*
-    Q:
+    Q:  1376. Time Needed to Inform All Employees
 */
+class Solution3_t
+{
+public:
+    int numOfMinutes(int n, int headID, vector<int> &manager, vector<int> &informTime)
+    {
+    }
+};
 
 /*
-    Q:
+    Q:  1377. Frog Position After T Seconds
 */
+class Solution4_t
+{
+public:
+    double frogPosition(int n, vector<vector<int>> &edges, int t, int target)
+    {
+    }
+};
