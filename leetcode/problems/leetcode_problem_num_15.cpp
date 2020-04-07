@@ -14,59 +14,17 @@
 
 using namespace std;
 
-// class Solution
-// {
-// public:
-//     vector<vector<int>> threeSum(vector<int> &n)
-//     {
-//         int nl = n.size();
-//         vector<vector<int>> retVal;
-//         for (int i = 0; i < nl - 2; i++)
-//         {
-//             for (int j = i + 1; j < nl - 1; j++)
-//             {
-//                 for (int k = j + 1; k < nl; k++)
-//                 {
-//                     if (n[i] + n[j] + n[k] == 0)
-//                     {
-//                         vector<int> s = {n[i], n[j], n[k]};
-//                         sort(s.begin(), s.end());
-//                         retVal.push_back(s);
-//                     }
-//                 }
-//             }
-//         }
-
-//         vector<vector<int>> result;
-//         if (retVal.size() > 0)
-//         {
-//             sort(retVal.begin(), retVal.end());
-
-//             result.push_back(retVal[0]);
-//             for (int i = 1; i < retVal.size(); i++)
-//             {
-//                 if (retVal[i] != result[result.size() - 1])
-//                 {
-//                     result.push_back(retVal[i]);
-//                 }
-//             }
-//         }
-
-//         return result;
-//     }
-// };
-
 class Solution 
 {
 private:
-  bool findNumber(vector<int>& nums, int s, int e, int target, int& result)
+  bool isTargetPresent(vector<int>& nums, int s, int e, int target)
   {
     while(s <= e)
     {
       int m = s + (e-s)/2;
+      
       if(nums[m] == target)
       {
-        result = m;
         return true;
       }
       else if(nums[m] > target)
@@ -83,37 +41,57 @@ private:
   }
   
 public:
-  vector<vector<int>> threeSum(vector<int>& nums) 
+  vector<vector<int>> threeSum(vector<int>& n) 
   {
-    sort(nums.begin(), nums.end());
+    sort(n.begin(), n.end());
+    
+    int count = 1;
+    vector<int> nums;
+    for(int a : n)
+    {
+      if(nums.size() > 0)
+      {
+        if(nums.back() == a)
+        {
+          count++;  
+        }
+        else
+        {
+          count = 1;
+        }
+        
+        if(count <= 3)
+        {
+          nums.push_back(a);
+        }
+      }
+      else
+      {
+        nums.push_back(a);
+      }
+    }
     
     vector<vector<int>> result;
     int l = nums.size();
     for(int i = 0; i < l - 2; ++i)
     {
-      int start = i + 1;
-      
-      while(start < l - 1)
+      for(int j = i + 1; j < l - 1; ++j)
       {
-        int target = 0 - (nums[i] + nums[start]);
-        
-        int p;
-        if(findNumber(nums, start + 1, l - 1, target, p))
+        int t = 0 - (nums[i] + nums[j]);  
+        if(isTargetPresent(nums, j + 1, l - 1, t))
         {
-          vector<int> r = {nums[i], nums[start], nums[p]};
-          
-          if((result.size() > 0) && (r != result.back()))
+          vector<int> v = {nums[i], nums[j], t};
+          if((result.size() == 0) || (result.size() > 0 && v != result.back()))
           {
-            result.push_back(r);
-          }
+            result.push_back(v);
+          }          
         }
-        
-        start++;
       }
     }
-
+    
     //now remove duplicates if any!
-    if(result.size() > 1)
+    l = result.size();
+    if(l > 0)
     {
       sort(result.begin(), result.end());
 
@@ -131,7 +109,7 @@ public:
 
       return ans;
     }
-
+    
     return result;
   }
 };
