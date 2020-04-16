@@ -1,7 +1,7 @@
 /****************************************************
-Date: April 14th
+Date: April 15th
 
-link: https://leetcode.com/explore/challenge/card/30-day-leetcoding-challenge/529/week-2/3299/
+link: https://leetcode.com/explore/challenge/card/30-day-leetcoding-challenge/530/week-3/3300/
 ****************************************************/
 
 #include <iostream>
