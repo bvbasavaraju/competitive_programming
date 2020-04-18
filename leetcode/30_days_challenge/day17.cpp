@@ -48,24 +48,26 @@ class Solution
 {
 private:
   //Basically Erase all the Adjacent lands if Adjacent land is 1, as it has been counted already
-  void connectAdjacentLand(vector<vector<char>>& g, int r, int c, int r_size, int c_size)
+  //Instead of erasing it can also be done with Visited flag of the grid size. 
+  //By erasing you are making it you are making it constant space!
+  void dfs(vector<vector<char>>& g, int r, int c, int r_size, int c_size)
   {
     g[r][c] = '0';
     if(r > 0 && g[r-1][c] == '1')
     {
-      connectAdjacentLand(g, r-1, c, r_size, c_size);
+      dfs(g, r-1, c, r_size, c_size);
     }
     if(r < r_size - 1 && g[r+1][c] == '1')
     {
-      connectAdjacentLand(g, r+1, c, r_size, c_size);
+      dfs(g, r+1, c, r_size, c_size);
     }
     if(c > 0 && g[r][c-1] == '1')
     {
-      connectAdjacentLand(g, r, c-1, r_size, c_size);
+      dfs(g, r, c-1, r_size, c_size);
     }
     if(c < c_size - 1 && g[r][c+1] == '1')
     {
-      connectAdjacentLand(g, r, c+1, r_size, c_size);
+      dfs(g, r, c+1, r_size, c_size);
     }
   }
   
@@ -88,7 +90,7 @@ public:
         if(g[i][j] == '1')
         {
           ans++;
-          connectAdjacentLand(g, i, j, r, c);
+          dfs(g, i, j, r, c);
         }
       }
     }
