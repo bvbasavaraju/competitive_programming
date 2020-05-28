@@ -1,7 +1,7 @@
 /****************************************************
 Date: May 24th
 
-link: https://leetcode.com/explore/challenge/card/may-leetcoding-challenge/537/week-4-may-22nd-may-28th/3340/
+link: https://leetcode.com/explore/challenge/card/may-leetcoding-challenge/537/week-4-may-22nd-may-28th/3339/
 ****************************************************/
 
 #include <iostream>
@@ -18,65 +18,107 @@ link: https://leetcode.com/explore/challenge/card/may-leetcoding-challenge/537/w
 #include <limits.h>
 
 using namespace std;
-
 /*
-  Q: 
-  We write the integers of A and B (in the order they are given) on two separate horizontal lines.
-  Now, we may draw connecting lines: a straight line connecting two numbers A[i] and B[j] such that:
-  A[i] == B[j];
-  The line we draw does not intersect any other connecting (non-horizontal) line.
-  Note that a connecting lines cannot intersect even at the endpoints:
-  each number can only belong to one connecting line.
-  Return the maximum number of connecting lines we can draw in this way.
+  Q: Construct Binary Search Tree from Preorder Traversal
+
+  Return the root node of a binary search tree that matches the given preorder traversal.
+  (Recall that a binary search tree is a binary tree where for every node, any descendant of node.
+  left has a value < node.val, and any descendant of node.right has a value > node.val.
+  Also recall that a preorder traversal displays the value of the node first, then traverses node.
+  left, then traverses node.right.)
+
+  It's guaranteed that for the given test cases there is always possible to find a binary search tree with the given requirements.
 
   Example 1:
-    Input: A = [1,4,2], B = [1,2,4]
-    Output: 2
-    Explanation: We can draw 2 uncrossed lines as in the diagram.
-    We cannot draw 3 uncrossed lines, because the line from A[1]=4 to B[2]=4 will intersect the line from A[2]=2 to B[1]=2.
+    Input: [8,5,1,7,10,12]
+    Output: [8,5,10,1,7,null,12]
 
-  Example 2:
-    Input: A = [2,5,1,2,5], B = [10,5,2,1,5,2]
-    Output: 3
-
-  Example 3:
-    Input: A = [1,3,7,1,7,5], B = [1,9,2,5,1]
-    Output: 2
-
-  Note:
-    1 <= A.length <= 500
-    1 <= B.length <= 500
-    1 <= A[i], B[i] <= 2000
-  Hide Hint #1  
-    Think dynamic programming. Given an oracle dp(i,j) that tells us how many lines A[i:], B[j:] 
-    [the sequence A[i], A[i+1], ... and B[j], B[j+1], ...] are uncrossed, can we write this as a recursion?
+  Constraints:
+    1 <= preorder.length <= 100
+    1 <= preorder[i] <= 10^8
+    The values of preorder are distinct.
 */
 
+/**
+ * Definition for a binary tree node.
+ */
+struct TreeNode {
+  int val;
+  TreeNode *left;
+  TreeNode *right;
+  TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+
 class Solution 
-{
-public:
-  int maxUncrossedLines(vector<int>& A, vector<int>& B) 
+{  
+private:
+  TreeNode* CreateTreeNode(vector<int>& data, int& i, int upper_limit)
   {
-    int lA = A.size();
-    int lB = B.size();
-    
-    vector<vector<int>> dp(lA+1, vector<int>(lB+1, 0));
-    
-    for(int i = 1; i <= lA; ++i)
+    if(i >= data.size() || data[i] > upper_limit)
     {
-      for(int j = 1; j <= lB; ++j)
+      return NULL;
+    }
+    
+    int val = data[i++];
+    TreeNode* node = new TreeNode(val);
+    node->left = CreateTreeNode(data, i, val);
+    node->right = CreateTreeNode(data, i, upper_limit);
+    
+    return node;
+  }
+  
+public:
+  TreeNode* bstFromPreorder(vector<int>& preorder) 
+  {
+    int i = 0;
+    //O(N) solution
+    return CreateTreeNode(preorder, i, INT_MAX);
+    
+    /*  // O(nlogn) solution
+    TreeNode* ans = NULL;
+    
+    int l = preorder.size();
+    for(int i = 0; i < l; ++i)
+    {
+      int v = preorder[i];
+      TreeNode* node = new TreeNode();
+      if(node == NULL)
       {
-        if(A[i-1] == B[j-1])
+        return NULL;
+      }
+      
+      node->val = v;
+      if(i == 0)
+      {
+        ans = node;
+      }
+      else
+      {
+        TreeNode* temp = ans;
+        while(temp != NULL)
         {
-          dp[i][j] = 1 + dp[i-1][j-1];
-        }
-        else
-        {
-          dp[i][j] = max(dp[i-1][j], dp[i][j-1]);
+          if(temp->val > v)
+          {
+            if(temp->left == NULL)
+            {
+              temp->left = node;
+              break;
+            }
+            temp = temp->left;
+          }
+          else
+          {
+            if(temp->right == NULL)
+            {
+              temp->right = node;
+              break;
+            }
+            temp = temp->right;
+          }
         }
       }
     }
     
-    return dp[lA][lB];
+    return ans;*/
   }
 };

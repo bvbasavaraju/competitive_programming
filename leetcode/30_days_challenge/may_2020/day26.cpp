@@ -1,7 +1,7 @@
 /****************************************************
 Date: May 26th
 
-link: https://leetcode.com/explore/challenge/card/may-leetcoding-challenge/537/week-4-may-22nd-may-28th/3342/
+link: https://leetcode.com/explore/challenge/card/may-leetcoding-challenge/537/week-4-may-22nd-may-28th/3341/
 ****************************************************/
 
 #include <iostream>
@@ -18,82 +18,53 @@ link: https://leetcode.com/explore/challenge/card/may-leetcoding-challenge/537/w
 #include <limits.h>
 
 using namespace std;
-/*
-  Q: Possible Bipartition
 
-  Given a set of N people (numbered 1, 2, ..., N), we would like to split everyone into two groups of any size.
-  Each person may dislike some other people, and they should not go into the same group. 
-  Formally, if dislikes[i] = [a, b], it means it is not allowed to put the people numbered a and b into the same group.
-  Return true if and only if it is possible to split everyone into two groups in this way.
+/*
+  Q: Contiguous Array
+  Given a binary array, find the maximum length of a contiguous subarray with equal number of 0 and 1.
 
   Example 1:
-    Input: N = 4, dislikes = [[1,2],[1,3],[2,4]]
-    Output: true
-    Explanation: group1 [1,4], group2 [2,3]
+    Input: [0,1]
+    Output: 2
+    Explanation: [0, 1] is the longest contiguous subarray with equal number of 0 and 1.
 
   Example 2:
-    Input: N = 3, dislikes = [[1,2],[1,3],[2,3]]
-    Output: false
-
-  Example 3:
-    Input: N = 5, dislikes = [[1,2],[2,3],[3,4],[4,5],[1,5]]
-    Output: false
-
-  Note:
-    1 <= N <= 2000
-    0 <= dislikes.length <= 10000
-    1 <= dislikes[i][j] <= N
-    dislikes[i][0] < dislikes[i][1]
-    There does not exist i != j for which dislikes[i] == dislikes[j].
+    Input: [0,1,0]
+    Output: 2
+    Explanation: [0, 1] (or [1, 0]) is a longest contiguous subarray with equal number of 0 and 1.
+    
+  Note: The length of the given binary array will not exceed 50,000.
 */
 
 class Solution 
 {
-private:
-  bool assignGroup(unordered_map<int, vector<int>>& people_with_dislikes, vector<int>& groups, int person, int group)
-  {
-    //Assign person to given group;
-    //All his dislikes should go to other group
-    //Check if dislikes also in same group. if so, return false
-    groups[person] = group;
-    
-    vector<int> dislikes = people_with_dislikes[person];
-    for(auto p : dislikes)
-    {
-      if(groups[p] == group)
-      {
-        return false;
-      }
-     
-      if(groups[p] == 0 && !assignGroup(people_with_dislikes, groups, p, -group))
-      {
-        return false;
-      }
-    }
-    
-    return true;
-  }
-  
 public:
-  bool possibleBipartition(int N, vector<vector<int>>& dislikes) 
+  int findMaxLength(vector<int>& nums) 
   {
-    unordered_map<int, vector<int>> people_with_dislikes;
-    for(auto n : dislikes)
+    int l = nums.size();
+    if(l <= 0)
     {
-      people_with_dislikes[n[0]].push_back(n[1]);
-      people_with_dislikes[n[1]].push_back(n[0]);
+      return 0;
     }
     
-    //0 - no group, 1 - group 1, -1 - group -1;
-    vector<int> groups(N+1, 0);
-    for(int i = 1; i <= N; ++i)
+    unordered_map<int, int> m;
+    int sum = 0;
+    int ans = 0;
+    m[0] = -1;    //if sum is 0, then its position is -1; This is the initial value
+    for(int i = 0; i < l; ++i)
     {
-      if(groups[i] == 0 && !assignGroup(people_with_dislikes, groups, i, 1))
+      sum += nums[i] == 1 ? 1 : -1; // Add 1 for 1 and -1 for 0
+      
+      if(m.find(sum) == m.end())
       {
-        return false;
+        m[sum] = i; //If sum not found add position of the sum to map, 
+      }
+      else
+      {
+        ans = max(ans, i - m[sum]); // If found, then substract the previous position with the current and check for max
       }
     }
     
-    return true;
+    return ans;
   }
 };
