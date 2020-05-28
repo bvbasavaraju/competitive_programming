@@ -6,11 +6,11 @@
   Third input is:   Word to be found
 
   Movements allowed Are:
-  Right to Left,
-  Left to Right,
-  Bottom to Top,
-  Top to Bottom,
-  Diagonal
+    Right to Left,
+    Left to Right,
+    Bottom to Top,
+    Top to Bottom,
+    Diagonal
 
   Ex:
   Inputs:
@@ -19,20 +19,20 @@
     ROSE
 
   Output:
-  (0,0)
-  (1,1)
-  (2,2)
-  (3,3)
+    (0,0)
+    (1,1)
+    (2,2)
+    (3,3)
 
   Explanation:
-  When given letters are arranged in the 2D matrix, it will be like below:
-  R K P B
-  T O A J
-  A T S P
-  P M S E
+    When given letters are arranged in the 2D matrix, it will be like below:
+    R K P B
+    T O A J
+    A T S P
+    P M S E
 
-  So, R can be found in (0,0), O in (1,1), S in (2,2) and E in (3,3).
-  With diagonal movement, the word can be found.
+    So, R can be found in (0,0), O in (1,1), S in (2,2) and E in (3,3).
+    With diagonal movement, the word can be found.
 */
 
 #include<iostream>
@@ -138,7 +138,7 @@ void  solution_function()
   cin >> str;
   
   bool found = false;
-  vector<vector<int>> found_pos; // positions in which chacters from str has been found
+  vector<vector<int>> found_pos; // positions in which characters from str has been found
   for(int i = 0; i < n && !found; ++i)
   {
       for(int j = 0; j < n && !found; ++j)
