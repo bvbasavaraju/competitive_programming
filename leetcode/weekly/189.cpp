@@ -1,9 +1,9 @@
 /****************************************************
 Date: May 17th, 2020
 Successful submissions : 2
-Time expiration : 0
+Time expiration : 1
 Not Solved : 1
-Wrong Answer/ Partial result : 1
+Wrong Answer/ Partial result : 0
 
 Note: Missed contest. So attended later!!
 
@@ -103,7 +103,7 @@ public:
 };
 
 /*
-  Q: 1452. People Whose List of Favorite Companies Is Not a Subset of Another List - partial or wrong ans!
+  Q: 1452. People Whose List of Favorite Companies Is Not a Subset of Another List - time limit exceeded
 */
 class Solution3_t
 {
