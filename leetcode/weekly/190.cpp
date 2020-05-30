@@ -101,10 +101,27 @@ public:
 class Solution2_t
 {
 public:
-    int maxVowels(string s, int k) 
+  int maxVowels(string s, int k) 
+  {
+    vector<int> c(26, 0);
+    for(int i = 0; i < k; ++i)
     {
-        
+      c[s[i] - 'a']++;
     }
+    
+    int ans = 0;
+    ans = max(ans, c[0] + c[4] + c[8] + c[14] + c[20]);
+    int l = s.size();
+    for(int i = k; i < l; ++i)
+    {
+      c[s[i - k] - 'a']--;
+      c[s[i] - 'a']++;
+      
+      ans = max(ans, c[0] + c[4] + c[8] + c[14] + c[20]);
+    }
+    
+    return ans;
+  }
 };
 
 /*
