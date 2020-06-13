@@ -11,378 +11,231 @@
 
 using namespace std;
 
-// bool IsThereAPossiblePathTowardsEnd(vector<vector<int>> &m, int r, int c, vector<vector<int>> &p)
+//Test if this works
+// void collectPathsToEnd(vector<vector<int>>& mat, int i, int j, int r, int c, vector<vector<int>> dp, vector<pair<int, int>>& path, int& prevSum, vector<pair<int, int>>& largetSumPath)
 // {
-//     if ((r == m.size() - 1) && (c == m[0].size() - 1))
+//   if (i >= r || j >= c)
+//   {
+//     return;
+//   }
+
+//   if(mat[i][j] < 0)
+//   {
+//     dp[i][j] = -10;
+//   }
+
+//   if(i == r-1 && j == c-1)
+//   {
+//     path.push_back(make_pair(i, j));
+
+//     int sum = 0;
+//     for(auto p : path)
 //     {
-//         if (m[r][c] != -1)
-//         {
-//             p[r][c] = 1;
-//             return true;
-//         }
-//         else
-//         {
-//             return false;
-//         }
+//       sum += mat[p.first][p.second];
 //     }
 
-//     if ((r <= m.size() - 1) && (c <= m[0].size() - 1) && (m[r][c] != -1))
+//     if(sum > prevSum)
 //     {
-//         p[r][c] = 1;
-
-//         if (IsThereAPossiblePathTowardsEnd(m, r, c + 1, p))
-//         {
-//             return true;
-//         }
-
-//         if (IsThereAPossiblePathTowardsEnd(m, r + 1, c, p))
-//         {
-//             return true;
-//         }
-
-//         //p[r][c] = 0;
+//       largetSumPath = path;
+//       prevSum = sum;
 //     }
+//   }
 
-//     return false;
+//   path.push_back(make_pair(i, j));
+//   collectPathsToEnd(mat, i, j+1, r, c, dp, path, prevSum, largetSumPath);
+//   collectPathsToEnd(mat, i+1, j, r, c, dp, path, prevSum, largetSumPath);
+//   path.pop_back();
 // }
 
-// bool IsThereAPossiblePathTowardsStart(vector<vector<int>> &m, int r, int c, vector<vector<int>> &p)
+// void collectPathsToStart(vector<vector<int>>& mat, int i, int j, vector<vector<int>> dp, vector<pair<int, int>>& path, int& prevSum, vector<pair<int, int>>& largetSumPath)
 // {
-//     if ((r == 0) && (c == 0))
+//   if (i < 0 || j < 0)
+//   {
+//     return;
+//   }
+
+//   if(dp[i][j] != -1)
+//   {
+//     return;
+//   }
+
+//   if(mat[i][j] < 0)
+//   {
+//     dp[i][j] = -10;
+//   }
+
+//   if(i == 0 && j == 0)
+//   {
+//     path.push_back(make_pair(i, j));
+
+//     int sum = 0;
+//     for(auto p : path)
 //     {
-//         if (m[0][0] != -1)
-//         {
-//             p[r][c] = 1;
-//             return true;
-//         }
-//         else
-//         {
-//             return false;
-//         }
+//       sum += mat[p.first][p.second];
 //     }
 
-//     if (r >= 0 && c >= 0 && m[r][c] != -1)
+//     if(sum > prevSum)
 //     {
-//         p[r][c] = 1;
-
-//         if (IsThereAPossiblePathTowardsStart(m, r, c - 1, p))
-//         {
-//             return true;
-//         }
-
-//         if (IsThereAPossiblePathTowardsStart(m, r - 1, c, p))
-//         {
-//             return true;
-//         }
-
-//         //p[r][c] = 0;
+//       largetSumPath = path;
+//       prevSum = sum;
 //     }
+//   }
 
-//     return false;
+//   path.push_back(make_pair(i, j));
+//   collectPathsToStart(mat, i, j-1, dp, path, prevSum, largetSumPath);
+//   collectPathsToStart(mat, i-1, j, dp, path, prevSum, largetSumPath);
+//   path.pop_back();
 // }
 
 // int collectMax(vector<vector<int>> mat)
 // {
-//     int r = mat.size();
-//     int c = mat[0].size();
-//     int result = 0;
+//   int ans = 0;
 
-//     { //Find path to end
-//         vector<vector<int>> path(r, vector<int>(c, 0));
-//         if (!IsThereAPossiblePathTowardsEnd(mat, 0, 0, path) || path[r - 1][c - 1] == 0)
-//         {
-//             return 0;
-//         }
+//   int r = mat.size();
+//   if (r <= 0)
+//   {
+//       return 0;
+//   }
+//   int c = mat[0].size();
 
-//         for (int i = 0; i < r; ++i)
-//         {
-//             for (int j = 0; j < c; j++)
-//             {
-//                 if (path[i][j] == 1)
-//                 {
-//                     result += mat[i][j];
-//                     mat[i][j] = 0;
-//                 }
-//             }
-//         }
-//     }
+//   if(mat[r-1][c-1] < 0 || mat[0][0] < 0)
+//   {
+//     return 0;
+//   }
 
-//     { //Finding path to start
-//         vector<vector<int>> path(r, vector<int>(c, 0));
-//         if (!IsThereAPossiblePathTowardsStart(mat, r - 1, c - 1, path))
-//         {
-//             return 0;
-//         }
+//   int sum = 0;
+//   vector<vector<int>> dp1(r, vector<int>(c, -1));
+//   vector<pair<int, int>> path;
+//   vector<pair<int, int>> largestSumPath;
+//   collectPathsToEnd(mat, 0, 0, r, c, dp1, path, sum, largestSumPath);
+//   if(largestSumPath.size() == 0)
+//   {
+//     return 0;
+//   }
 
-//         for (int i = 0; i < r; ++i)
-//         {
-//             for (int j = 0; j < c; ++j)
-//             {
-//                 if (path[i][j] == 1)
-//                 {
-//                     result += mat[i][j];
-//                     mat[i][j] = 0;
-//                 }
-//             }
-//         }
-//     }
+//   for(auto p : largestSumPath)
+//   {
+//     mat[p.first][p.second] = 0;
+//   }
+//   ans += sum;
 
-// return result;
+//   sum = 0;
+//   path.clear();
+//   largestSumPath.clear();
+//   vector<vector<int>> dp2(r, vector<int>(c, -1));
+//   collectPathsToStart(mat, r-1, c-1, dp2, path, sum, largestSumPath);
+
+//   ans += sum;
+
+//   return ans;
 // }
 
-/*void collectRiderTowardsStart(vector<vector<int>> &mat, int i, int j, int &ans, bool &reached)
+int collected(vector<vector<int>>& mat, int r1, int c1, int r2, int c2)
 {
-    if (i < 0 || j < 0 || mat[i][j] < 0 || reached)
+    if(r1 == r2 && c1 == c2)
     {
-        return;
+        if(mat[r1][c1] > 0)
+        {
+            return 1;
+        }
+
+        return 0;
     }
 
-    ans += mat[i][j];
-    mat[i][j] = 0;
+    int sum = 0;
 
-    if (i == 0 && j == 0)
+    if(mat[r1][c1] > 0)
     {
-        reached = true;
+        sum++;
+    }
+    if(mat[r2][c2] > 0)
+    {
+        sum++;
     }
 
-    if (!reached)
-    {
-        collectRiderTowardsStart(mat, i, j - 1, ans, reached);
-        collectRiderTowardsStart(mat, i - 1, j, ans, reached);
-    }
+    return sum;
 }
 
-void collectRiderTowardsEnd(vector<vector<int>> &mat, int i, int j, int r, int c, int &ans, bool &reached)
+int getMaxCollection(vector<vector<int>>& mat, vector<vector<vector<int>>>& dp, int r1, int c1, int r2, int x, int y)
 {
-    if (i >= r || j >= c || mat[i][j] < 0 || reached)
+    int c2 = (r1 + c1) - r2;
+
+    if(r1 == x-1 && c1 == y-1 && r2 == x-1 && c2 == y-1)
     {
-        return;
+        return 0;
+    }
+    
+    if(r1 >= x || r2 >= x || c1 >= y || c2 >= y)
+    {
+        return -10;
     }
 
-    ans += mat[i][j];
-    mat[i][j] = 0;
-
-    if (((r - 1) == i) && ((c - 1) == j))
+    if(dp[r1][c1][r2] != -1)
     {
-        reached = true;
+        return dp[r1][c1][r2];
     }
 
-    if (!reached)
+    int s1 = -10, s2 = -10, s3 = -10, s4 = -10;
+    if(c1+1 < y && c2+1 < y && mat[r1][c1+1] != -1 && mat[r2][c2+1] != -1)
     {
-        collectRiderTowardsEnd(mat, i, j + 1, r, c, ans, reached);
-        collectRiderTowardsEnd(mat, i + 1, j, r, c, ans, reached);
+        s1 = collected(mat, r1, c1+1, r2, c2+1)
+        + getMaxCollection(mat, dp, r1, c1+1, r2, x, y);
     }
+
+    if(r1+1 < x && r2+1 < x && mat[r1+1][c1] != -1 && mat[r2+1][c2] != -1)
+    {
+        s2 = collected(mat, r1+1, c1, r2+1, c2)
+        + getMaxCollection(mat, dp, r1+1, c1, r2+1, x, y);
+    }
+
+    if(c1+1 < y && r2+1 < x && mat[r1][c1+1] != -1 && mat[r2+1][c2] != -1)
+    {
+        s3 = collected(mat, r1, c1+1, r2+1, c2)
+        + getMaxCollection(mat, dp, r1, c1+1, r2+1, x, y);
+    }
+
+    if(r1+1 < x && c2+1 < y && mat[r1+1][c1] != -1 && mat[r2][c2+1] != -1)
+    {
+        s4 = collected(mat, r1+1, c1, r2, c2+1)
+        + getMaxCollection(mat, dp, r1+1, c1, r2, x, y);
+    }
+
+    int m = max({s1, s2, s3, s4});
+    dp[r1][c1][r2] = m;
+    return m;
 }
 
 int collectMax(vector<vector<int>> mat)
 {
-    int ans = 0;
+  int ans = 0;
 
-    int r = mat.size();
-    if (r <= 0)
-    {
-        return 0;
-    }
-    int c = mat[0].size();
+  int r = mat.size();
+  if (r <= 0)
+  {
+      return 0;
+  }
+  int c = mat[0].size();
 
-    bool reachedEnd = false;
-    collectRiderTowardsEnd(mat, 0, 0, r, c, ans, reachedEnd);
-    if (!reachedEnd)
-    {
-        ans = 0;
-    }
-    else
-    {
-        bool reachedStart = false;
-        collectRiderTowardsStart(mat, r - 1, c - 1, ans, reachedStart);
-        if (!reachedStart)
-        {
-            return 0;
-        }
-    }
+  if(mat[r-1][c-1] < 0 || mat[0][0] < 0)
+  {
+    return 0;
+  }
 
-    return ans;
-}*/
+  vector<vector<vector<int>>> dp(100, vector<vector<int>>(100, vector<int>(100, -1)));
 
-bool collectRiderTowardsStart(vector<vector<int>> &mat, int i, int j, int &ans)
-{
-    if (i < 0 || j < 0 || mat[i][j] < 0)
-    {
-        return false;
-    }
+  ans += mat[r-1][c-1] + mat[0][0];
+  mat[r-1][c-1] = 0;
+  mat[0][0] = 0;
 
-    int value_added = mat[i][j];
-    ans += mat[i][j];
-    mat[i][j] = 0;
+  ans += getMaxCollection(mat, dp, 0, 0, 0, r, c);
 
-    if (i == 0 && j == 0)
-    {
-        return true;
-    }
-
-    if (!collectRiderTowardsStart(mat, i, j - 1, ans))
-    {
-        mat[i][j] = value_added;
-        ans -= value_added;
-        return false;
-    }
-    if (!collectRiderTowardsStart(mat, i - 1, j, ans))
-    {
-        mat[i][j] = value_added;
-        ans -= value_added;
-        return false;
-    }
-
-    return true;
-}
-
-bool collectRiderTowardsEnd(vector<vector<int>> &mat, int i, int j, int r, int c, int &ans)
-{
-    if (i >= r || j >= c || mat[i][j] < 0)
-    {
-        return false;
-    }
-
-    int value_added = mat[i][j];
-    ans += mat[i][j];
-    mat[i][j] = 0;
-
-    if (((r - 1) == i) && ((c - 1) == j))
-    {
-        return true;
-    }
-
-    if (!collectRiderTowardsEnd(mat, i, j + 1, r, c, ans))
-    {
-        mat[i][j] = value_added;
-        ans -= value_added;
-        return false;
-    }
-    if (!collectRiderTowardsEnd(mat, i + 1, j, r, c, ans))
-    {
-        mat[i][j] = value_added;
-        ans -= value_added;
-        return false;
-    }
-
-    return true;
-}
-
-int collectMax(vector<vector<int>> mat)
-{
-    int ans = 0;
-
-    int r = mat.size();
-    if (r <= 0)
-    {
-        return 0;
-    }
-    int c = mat[0].size();
-
-    // if (!collectRiderTowardsEnd(mat, 0, 0, r, c, ans))
-    // {
-    //     ans = 0;
-    // }
-    // else
-    // {
-    //     if (!collectRiderTowardsStart(mat, r - 1, c - 1, ans))
-    //     {
-    //         ans = 0;
-    //     }
-    // }
-    int lastValue = mat[r - 1][c - 1];
-    if (lastValue < 0)
-    {
-        return 0;
-    }
-
-    ans = 0;
-    for (int i = 0; i < r; ++i)
-    {
-        for (int j = 0; j < c; ++j)
-        {
-            if (mat[i][j] < 0)
-            {
-                continue;
-            }
-
-            if (i == 0 && j == 0)
-            {
-                //nothing to do
-            }
-            else if (i == 0)
-            {
-                mat[i][j] += mat[i][j - 1];
-                mat[i][j - 1] = 0;
-            }
-            else if (j == 0)
-            {
-                mat[i][j] += mat[i - 1][j];
-                mat[i - 1][j] = 0;
-            }
-            else
-            {
-                if (mat[i][j - 1] >= mat[i - 1][j])
-                {
-                    mat[i][j] += mat[i][j - 1];
-                    mat[i][j - 1] = 0;
-                }
-                else
-                {
-                    mat[i][j] += mat[i - 1][j];
-                    mat[i - 1][j] = 0;
-                }
-            }
-        }
-    }
-
-    ans += mat[r - 1][c - 1];
-    mat[r - 1][c - 1] = 0;
-    for (int i = r - 1; i >= 0; --i)
-    {
-        for (int j = c - 1; j >= 0; --j)
-        {
-            if (mat[i][j] < 0)
-            {
-                continue;
-            }
-            if (i == r - 1 && j == c - 1)
-            {
-                //nothing to do
-            }
-            else if (i == r - 1)
-            {
-                mat[i][j] += mat[i][j + 1];
-                mat[i][j + 1] = 0;
-            }
-            else if (j == c - 1)
-            {
-                mat[i][j] += mat[i + 1][j];
-                mat[i + 1][j] = 0;
-            }
-            else
-            {
-                if (mat[i][j + 1] >= mat[i + 1][j])
-                {
-                    mat[i][j] += mat[i][j + 1];
-                    mat[i][j + 1] = 0;
-                }
-                else
-                {
-                    mat[i][j] += mat[i + 1][j];
-                    mat[i + 1][j] = 0;
-                }
-            }
-        }
-    }
-    ans += mat[0][0] + 1;
-
-    return ans;
+  ans = max(ans, 0);
+  return ans;
 }
 
 int main()
 {
-    vector<vector<int>> m = {{0, 1, 1}, {1, 0, -1}, {1, 1, -1}};
+    vector<vector<int>> m = {{0, 1, 1}, {1, 0, 1}, {1, 1, 1}};
     printf("Count = %d", collectMax(m));
 
     return 0;
