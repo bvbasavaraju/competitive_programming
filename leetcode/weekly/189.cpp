@@ -5,13 +5,12 @@ Time expiration : 1
 Not Solved : 1
 Wrong Answer/ Partial result : 0
 
-Note: Missed contest. So attended later!!
-
 link: https://leetcode.com/contest/weekly-contest-189
 ****************************************************/
 
 #include <iostream>
 #include <vector>
+#include <list>
 #include <algorithm>
 #include <string>
 #include <stack>
@@ -20,6 +19,7 @@ link: https://leetcode.com/contest/weekly-contest-189
 #include <unordered_map>
 #include <unordered_set>
 #include <cmath>
+#include <limits.h>
 
 using namespace std;
 
@@ -103,7 +103,7 @@ public:
 };
 
 /*
-  Q: 1452. People Whose List of Favorite Companies Is Not a Subset of Another List - time limit exceeded
+  Q: 1452. People Whose List of Favorite Companies Is Not a Subset of Another List
 */
 class Solution3_t
 {
@@ -178,3 +178,17 @@ public:
       
   }
 };
+
+int main()
+{
+  // {
+  //   Solution s;
+  //   vector<vector<string>> data = {{"leetcode","google","facebook"},{"leetcode","amazon"},{"facebook","google"}};
+  //   vector<int> r = s.peopleIndexes(data);
+  // }
+  {
+    Solution3_t s;
+    vector<vector<string>> data = {{"nxaqhyoprhlhvhyojanr","ovqdyfqmlpxapbjwtssm","qmsbphxzmnvflrwyvxlc","udfuxjdxkxwqnqvgjjsp","yawoixzhsdkaaauramvg","zycidpyopumzgdpamnty"},{"nxaqhyoprhlhvhyojanr","ovqdyfqmlpxapbjwtssm","udfuxjdxkxwqnqvgjjsp","yawoixzhsdkaaauramvg","zycidpyopumzgdpamnty"},{"ovqdyfqmlpxapbjwtssm","qmsbphxzmnvflrwyvxlc","udfuxjdxkxwqnqvgjjsp","yawoixzhsdkaaauramvg","zycidpyopumzgdpamnty"}};
+    vector<int> r = s.peopleIndexes(data);
+  }
+}
