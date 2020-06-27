@@ -1,7 +1,7 @@
 /****************************************************
 Date: June 21st
 
-link: https://leetcode.com/explore/challenge/card/june-leetcoding-challenge/542/week-4-june-22nd-june-28th/3368/
+link: https://leetcode.com/explore/challenge/card/june-leetcoding-challenge/541/week-3-june-15th-june-21st/3367/
 ****************************************************/
 
 #include <iostream>
@@ -21,43 +21,66 @@ link: https://leetcode.com/explore/challenge/card/june-leetcoding-challenge/542/
 using namespace std;
 
 /*
-    Q: Single Number II
+  Q: Dungeon Game
 
-    Given a non-empty array of integers, every element appears three times except for one, which appears exactly once. Find that single one.
+  The demons had captured the princess (P) and imprisoned her in the bottom-right corner of a dungeon.
+  The dungeon consists of M x N rooms laid out in a 2D grid. Our valiant knight (K) was initially positioned
+  in the top-left room and must fight his way through the dungeon to rescue the princess.
 
-    Note:
-    Your algorithm should have a linear runtime complexity. Could you implement it without using extra memory?
+  The knight has an initial health point represented by a positive integer.
+  If at any point his health point drops to 0 or below, he dies immediately.
 
-    Example 1:
-        Input: [2,2,3,2]
-        Output: 3
+  Some of the rooms are guarded by demons, so the knight loses health (negative integers) 
+  upon entering these rooms; other rooms are either empty (0's) or contain magic orbs that increase 
+  the knight's health (positive integers).
 
-    Example 2:
-        Input: [0,1,0,1,0,1,99]
-        Output: 99
+  In order to reach the princess as quickly as possible, 
+  the knight decides to move only rightward or downward in each step.
+
+  Write a function to determine the knight's minimum initial health so that he is able to rescue the princess.
+
+  For example, given the dungeon below, the initial health of the knight must be at least 7 
+  if he follows the optimal path RIGHT-> RIGHT -> DOWN -> DOWN.
+
+  -2 (K)  -3    3
+  -5	    -10	  1
+  10	    30	 -5 (P)
+
+  Note:
+    The knight's health has no upper bound.
+    Any room can contain threats or power-ups, even the first room the knight enters and 
+    the bottom-right room where the princess is imprisoned.
 */
-
-class Solution
-{
+class Solution 
+{  
 public:
-    int singleNumber(vector<int> &nums)
+  int calculateMinimumHP(vector<vector<int>>& dun) 
+  {
+    int r = dun.size();
+    if(r == 0)
     {
-        unordered_map<int, int> m;
-        for (auto n : nums)
-        {
-            m[n]++;
-        }
-
-        int ans = 0;
-        for (auto it = m.begin(); it != m.end(); ++it)
-        {
-            if (it->second == 1)
-            {
-                ans = it->first;
-                break;
-            }
-        }
-
-        return ans;
+      return 0;
     }
+    
+    int c = dun[0].size();
+    if(c == 0)
+    {
+      return 0;
+    }
+    
+    vector<vector<int>> dp(r+1, vector<int>(c+1, INT_MAX));
+    dp[r][c-1] = 1;
+    dp[r-1][c] = 1;
+    
+    for(int i = r-1; i >= 0; --i)
+    {
+      for(int j = c-1; j >= 0; --j)
+      {
+        int diff = min(dp[i+1][j], dp[i][j+1]) - dun[i][j];
+        dp[i][j] = (diff <= 0) ? 1 : diff;
+      }
+    }
+    
+    return dp[0][0];
+  }
 };
