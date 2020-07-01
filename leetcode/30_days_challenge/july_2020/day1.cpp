@@ -49,24 +49,53 @@ class Solution
 public:
     int arrangeCoins(int n)
     {
-        int ans = 0;
-        int count = 0;
-        while (count < n)
+        //O(logn) solution
+        long long lo = 0;
+        long long hi = n;
+
+        long long ans = 0;
+        while (lo <= hi)
         {
-            if ((n - count) < (ans + 1))
+            long long mid = lo + (hi - lo) / 2;
+
+            ans = mid * (mid + 1) / 2;
+
+            if (ans == n)
             {
-                break;
+                return static_cast<int>(mid);
             }
 
-            ans++;
-            count += ans;
-
-            if ((n - count) <= 0)
+            if (n < ans)
             {
-                break;
+                hi = mid - 1;
+            }
+            else
+            {
+                lo = mid + 1;
             }
         }
 
-        return ans;
+        return static_cast<int>(hi);
+
+        //O(n)
+        /*int ans = 0;
+    int count = 0;
+    while(count < n)
+    {
+      if((n - count) < (ans + 1))
+      {
+        break;
+      }
+      
+      ans++;
+      count += ans;
+      
+      if((n - count) <= 0)
+      {
+        break;
+      }
+    }
+    
+    return ans;*/
     }
 };
