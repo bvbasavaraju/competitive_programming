@@ -1,7 +1,7 @@
 /****************************************************
 Date: July 15th
 
-link: https://leetcode.com/explore/featured/card/july-leetcoding-challenge/544/week-1-july-1st-july-7th/3377/
+link: https://leetcode.com/explore/challenge/card/july-leetcoding-challenge/546/week-3-july-15th-july-21st/3393/
 ****************************************************/
 
 #include <iostream>
