@@ -39,21 +39,53 @@ class Solution
 public:
     vector<int> singleNumber(vector<int> &nums)
     {
-        unordered_map<int, int> frq;
+        //O(1) space
+        int xored = 0;
         for (int n : nums)
         {
-            frq[n]++;
+            xored ^= n;
         }
 
-        vector<int> ans;
-        for (auto it = frq.begin(); it != frq.end(); ++it)
+        int bit = 0;
+        for (int i = 0; i < 32; ++i)
         {
-            if (it->second == 1)
+            if (xored & (1 << i))
             {
-                ans.push_back(it->first);
+                bit = i;
+                break;
             }
         }
 
-        return ans;
+        int first = 0;
+        for (int n : nums)
+        {
+            if (n & (1 << bit))
+            {
+                first ^= n;
+            }
+        }
+
+        int second = xored ^ first;
+
+        return {first, second};
+
+        /* O(n) - space
+    
+    unordered_map<int, int> frq;
+    for(int n : nums)
+    {
+      frq[n]++;
+    }
+    
+    vector<int> ans;
+    for(auto it = frq.begin(); it != frq.end(); ++it)
+    {
+      if(it->second == 1)
+      {
+        ans.push_back(it->first);
+      }
+    }
+    
+    return ans;*/
     }
 };
