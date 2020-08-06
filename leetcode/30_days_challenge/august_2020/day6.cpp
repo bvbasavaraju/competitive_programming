@@ -38,6 +38,29 @@ class Solution
 public:
   vector<int> findDuplicates(vector<int>& nums) 
   {
+    //O(n) - time ans O(1) - space
+    int l = nums.size();
+    vector<int> ans(l, 0);
+    for(auto n : nums)
+    {
+      ans[n-1]++;
+    }
+    
+    int p = 0;
+    for(int i = 0; i < l; ++i)
+    {
+      if(ans[i] == 2)
+      {
+        ans[i] = i + 1;
+        swap(ans[i], ans[p]);
+        p++;
+      }
+    }
+    
+    ans.resize(p);
+    return ans;
+    
+    /* O(n) - Space and time complexity!!
     vector<int> ans;
     unordered_set<int> freq;
     for(auto n : nums)
@@ -52,6 +75,6 @@ public:
       }
     }
     
-    return ans;
+    return ans;*/
   }
 };
