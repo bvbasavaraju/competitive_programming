@@ -1,9 +1,9 @@
 /****************************************************
 Date: aug 9nd, 2020
-Successful submissions : 2
+Successful submissions : 1
 Time expiration : 0
-Not Solved : 1
-Wrong Answer/ Partial result : 1
+Not Solved : 3
+Wrong Answer/ Partial result : 0
 
 link: https://leetcode.com/contest/weekly-contest-201
 ****************************************************/
