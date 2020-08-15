@@ -21,47 +21,51 @@ link: https://leetcode.com/explore/challenge/card/august-leetcoding-challenge/55
 using namespace std;
 
 /*
-  Q: Pascal's Triangle II
+  Q: H-Index
 
-  Given a non-negative index k where k ≤ 33, return the kth index row of the Pascal's triangle.
-  Note that the row index starts from 0.
+  Given an array of citations (each citation is a non-negative integer) of a researcher, 
+  write a function to compute the researcher's h-index.
 
-  In Pascal's triangle, each number is the sum of the two numbers directly above it.
+  According to the definition of h-index on Wikipedia: 
+  "A scientist has index h if h of his/her N papers have at least h citations each, 
+  and the other N − h papers have no more than h citations each."
+
   Example:
-    Input: 3
-    Output: [1,3,3,1]
-    Follow up:
+    Input: citations = [3,0,6,1,5]
+    Output: 3 
+    Explanation: [3,0,6,1,5] means the researcher has 5 papers in total and each of them had 
+                received 3, 0, 6, 1, 5 citations respectively. 
+                Since the researcher has 3 papers with at least 3 citations each and the remaining 
+                two with no more than 3 citations each, her h-index is 3.
+  
+  Note: If there are several possible values for h, the maximum one is taken as the h-index.
 
-  Could you optimize your algorithm to use only O(k) extra space?
-
-                      1
-                      1,1
-                      1,2,1
-                      1,3,3,1
-                      1,4,6,4,1
-                      1,5,10,10,5,1
-                      1,6,15,20,15,6,1
-                      1,7,21,35,35,21,7,1
+  Hide Hint #1  
+    An easy approach is to sort the array first.
+  Hide Hint #2  
+    What are the possible values of h-index?
+  Hide Hint #3  
+    A faster approach is to use extra space.
 */
-
-class Solution 
+class Solution
 {
 public:
-  vector<int> getRow(int r) 
+  int hIndex(vector<int> &c)
   {
-    vector<int> prev;
-    vector<int> ans(r+1, 1);
-    for(int i = 1; i <= r; ++i)
+    if (c.size() <= 0)
     {
-      for(int j = 1; j < i; ++j)
-      {
-        ans[j] = prev[j-1] + prev[j];
-      }
-      
-      prev = ans;
+      return 0;
     }
-    
-    return ans;
+
+    sort(c.begin(), c.end());
+
+    int i = 0;
+    int l = c.size();
+    while (i < l && c[i] < l - i)
+    {
+      i++;
+    }
+
+    return l - i;
   }
 };
-

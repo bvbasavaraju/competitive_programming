@@ -1,5 +1,5 @@
 /****************************************************
-Date: July 11th
+Date: July 12th
 
 link: https://leetcode.com/explore/challenge/card/august-leetcoding-challenge/550/week-2-august-8th-august-14th/3417/
 ****************************************************/
@@ -19,119 +19,48 @@ link: https://leetcode.com/explore/challenge/card/august-leetcoding-challenge/55
 #include <set>
 
 using namespace std;
+
 /*
-  Q: Iterator for Combination
+  Q: Pascal's Triangle II
 
-  Design an Iterator class, which has:
-  A constructor that takes a string characters of sorted distinct lowercase English letters and a number combinationLength as arguments.
-  A function next() that returns the next combination of length combinationLength in lexicographical order.
-  A function hasNext() that returns True if and only if there exists a next combination.
+  Given a non-negative index k where k ≤ 33, return the kth index row of the Pascal's triangle.
+  Note that the row index starts from 0.
 
+  In Pascal's triangle, each number is the sum of the two numbers directly above it.
   Example:
-    CombinationIterator iterator = new CombinationIterator("abc", 2); // creates the iterator.
+    Input: 3
+    Output: [1,3,3,1]
+    Follow up:
 
-    iterator.next(); // returns "ab"
-    iterator.hasNext(); // returns true
-    iterator.next(); // returns "ac"
-    iterator.hasNext(); // returns true
-    iterator.next(); // returns "bc"
-    iterator.hasNext(); // returns false
+  Could you optimize your algorithm to use only O(k) extra space?
 
-  Constraints:
-    1 <= combinationLength <= characters.length <= 15
-    There will be at most 10^4 function calls per test.
-    It's guaranteed that all calls of the function next are valid.
-  
-  Hide Hint #1  
-    Generate all combinations as a preprocessing.
-  Hide Hint #2  
-    Use bit masking to generate all the combinations.
+                      1
+                      1,1
+                      1,2,1
+                      1,3,3,1
+                      1,4,6,4,1
+                      1,5,10,10,5,1
+                      1,6,15,20,15,6,1
+                      1,7,21,35,35,21,7,1
 */
 
-class CombinationIterator 
+class Solution
 {
-private:
-  set<string> combs;
-  set<string>::iterator it;
-    void prepare(string& str, int len)
-  {
-    int l = str.size();
-    int num = 0;
-    
-    int i = 0;
-    while(i < len)
-    {
-      num |= (1 << i);
-      ++i;
-    }
-    
-    int maxi = pow(2, l);
-    for(i = num; i < maxi; ++i)
-    {
-      int n = i;
-      int p = 0;
-      
-      string s = "";
-      while(n > 0)
-      {
-        if((n & 0x01) && (p < l))
-        {
-          s += str[p];
-        }
-        ++p;
-        n >>= 1;
-      }
-      
-      if(s.size() == len)
-      {
-        combs.insert(s);
-      }
-    }
-    
-    it = combs.begin();
-  }
-  
 public:
-  CombinationIterator(string characters, int combinationLength) 
+  vector<int> getRow(int r)
   {
-    prepare(characters, combinationLength);
-  }
-
-  string next() 
-  {
-    if(it == combs.end())
+    vector<int> prev;
+    vector<int> ans(r + 1, 1);
+    for (int i = 1; i <= r; ++i)
     {
-      return "";
+      for (int j = 1; j < i; ++j)
+      {
+        ans[j] = prev[j - 1] + prev[j];
+      }
+
+      prev = ans;
     }
 
-    string ans = *it;
-    it++;
-    
     return ans;
   }
-
-  bool hasNext() 
-  {
-    return it != combs.end() ? true : false;
-  }
 };
-
-int main()
-{
-  {
-    CombinationIterator c("abcdef",4);
-    c.next();
-    c.hasNext();
-    c.next();
-    c.hasNext();
-    c.next();
-    c.hasNext();
-  }
-}
-
-/**
- * Your CombinationIterator object will be instantiated and called as such:
- * CombinationIterator* obj = new CombinationIterator(characters, combinationLength);
- * string param_1 = obj->next();
- * bool param_2 = obj->hasNext();
- */

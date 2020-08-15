@@ -21,51 +21,55 @@ link: https://leetcode.com/explore/challenge/card/august-leetcoding-challenge/55
 using namespace std;
 
 /*
-  Q: H-Index
+    Q: Excel Sheet Column Number
 
-  Given an array of citations (each citation is a non-negative integer) of a researcher, 
-  write a function to compute the researcher's h-index.
+    Given a column title as appear in an Excel sheet, return its corresponding column number.
 
-  According to the definition of h-index on Wikipedia: 
-  "A scientist has index h if h of his/her N papers have at least h citations each, 
-  and the other N − h papers have no more than h citations each."
-
-  Example:
-    Input: citations = [3,0,6,1,5]
-    Output: 3 
-    Explanation: [3,0,6,1,5] means the researcher has 5 papers in total and each of them had 
-                received 3, 0, 6, 1, 5 citations respectively. 
-                Since the researcher has 3 papers with at least 3 citations each and the remaining 
-                two with no more than 3 citations each, her h-index is 3.
-  
-  Note: If there are several possible values for h, the maximum one is taken as the h-index.
-
-  Hide Hint #1  
-    An easy approach is to sort the array first.
-  Hide Hint #2  
-    What are the possible values of h-index?
-  Hide Hint #3  
-    A faster approach is to use extra space.
+    For example:
+        A -> 1
+        B -> 2
+        C -> 3
+        ...
+        Z -> 26
+        AA -> 27
+        AB -> 28 
+        ...
+    
+    Example 1:
+        Input: "A"
+        Output: 1
+    
+    Example 2:
+        Input: "AB"
+        Output: 28
+    
+    Example 3:
+        Input: "ZY"
+        Output: 701
+ 
+    Constraints:
+        1 <= s.length <= 7
+        s consists only of uppercase English letters.
+        s is between "A" and "FXSHRXW".
 */
-class Solution 
+
+class Solution
 {
 public:
-  int hIndex(vector<int>& c) 
-  {
-    if(c.size() <= 0)
+    int titleToNumber(string s)
     {
-      return 0;
+        int l = s.size();
+        int ans = 0;
+        long long base = 1;
+        for (int i = l - 1; i >= 0; --i)
+        {
+            ans += (base * (s[i] - 'A' + 1));
+            if (base > 0)
+            {
+                base *= 26;
+            }
+        }
+
+        return ans;
     }
-    
-    sort(c.begin(), c.end());
-    
-    int i = 0;
-    int l = c.size();
-    while(i < l && c[i] < l-i)
-    {
-      i++;
-    }
-    
-    return l-i;
-  }
 };
