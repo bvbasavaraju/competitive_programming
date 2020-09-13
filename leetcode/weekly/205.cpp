@@ -1,10 +1,9 @@
 /****************************************************
-Date: Sept 13th, 2020
-Successful submissions : 1
+Date: Sept 6th, 2020
+Successful submissions : 3
 Time expiration : 0
-Not Solved : 2
-Wrong Answer/ Partial result : 1
-
+Not Solved : 1
+Wrong Answer/ Partial result : 0
 link: https://leetcode.com/contest/weekly-contest-205
 ****************************************************/
 
@@ -20,116 +19,160 @@ link: https://leetcode.com/contest/weekly-contest-205
 #include <unordered_map>
 #include <unordered_set>
 #include <cmath>
+#include <limits.h>
 
 using namespace std;
 
 /*
-  Q: 1582. Special Positions in a Binary Matrix
+    Q: 1576. Replace All ?'s to Avoid Consecutive Repeating Characters
 */
 class Solution1_t
 {
-private:
-  bool isColumnSpecial(vector<vector<int>>& mat, int total_rows, int c)
-  {
-    int count = 0;
-    for(int i = 0; i < total_rows; ++i)
-    {
-      if(mat[i][c] == 1)
-      {
-        count++;
-      }
-      
-      if(count > 1)
-      {
-        return false;
-      }
-    }
-    
-    return (count == 1);
-  }
 public:
-  int numSpecial(vector<vector<int>>& mat) 
-  {
-    int r = mat.size();
-    int c = mat[0].size();
-    
-    int ans = 0;
-    for(int i = 0; i < r; ++i)
+    string modifyString(string s)
     {
-      int count = 0;
-      int column = -1;
-      for(int j = 0; j < c; ++j)
-      {
-        if(mat[i][j] == 1) 
+        vector<int> chars(26);
+        for (int i = 0; i < 26; ++i)
         {
-          count++;
-          column = j;
+            chars[i] = i + 'a';
         }
-      }
-      
-      if((count == 1) && (column >= 0 && column < c) && isColumnSpecial(mat, r, column))
-      {
-        ans++;
-      }
+
+        int p = 0;
+        int l = s.size();
+        for (int i = 0; i < l; ++i)
+        {
+            if (s[i] == '?')
+            {
+                bool unique = false;
+                while (!unique)
+                {
+                    if (s[i + 1] == chars[p])
+                    {
+                        p++;
+                    }
+                    if (i > 0 && s[i - 1] == chars[p])
+                    {
+                        p++;
+                    }
+                    else
+                    {
+                        unique = true;
+                    }
+                }
+
+                s[i] = chars[p % 26];
+                p++;
+                p = p % 26;
+            }
+            else
+            {
+                p = 0;
+            }
+        }
+
+        return s;
     }
-    
-    return ans;
-  }
 };
 
 /*
-  Q: 1583. Count Unhappy Friends
+    Q: 1577. Number of Ways Where Square of Number Is Equal to Product of Two Numbers
 */
 class Solution2_t
 {
-public:
-  int unhappyFriends(int n, vector<vector<int>>& preferences, vector<vector<int>>& pairs) 
-  {
-    int ans = 0;
-    for(vector<int>& p : pairs)
+private:
+    void getProducts(vector<int> &nums, map<long long int, int> &p)
     {
-      int p1 = p[0];
-      int p2 = p[1];
-      
-      vector<int>& p1pref = preferences[p1];
-      for(int pref : p1pref)
-      {
-        
-      }
-      if(preferences[p1][0] != p2)
-      {
-        ans++;
-      }
-      if(preferences[p2][0] != p1)
-      {
-        ans++;
-      }
+        int l = nums.size();
+        for (int i = 0; i < l; ++i)
+        {
+            for (int j = i + 1; j < l; ++j)
+            {
+                long long int n1 = nums[i];
+                long long int n2 = nums[j];
+
+                long long int prod = n1 * n2;
+                p[prod]++;
+            }
+        }
     }
-    
-    return ans;
-  }
+
+    int getCount(vector<int> &nums, map<long long int, int> &p)
+    {
+        int retVal = 0;
+
+        for (long long int n : nums)
+        {
+            long long int s = n * n;
+            if (p.find(s) != p.end())
+            {
+                retVal += p[s];
+            }
+        }
+
+        return retVal;
+    }
+
+public:
+    int numTriplets(vector<int> &nums1, vector<int> &nums2)
+    {
+        map<long long int, int> n1p;
+        getProducts(nums1, n1p);
+
+        map<long long int, int> n2p;
+        getProducts(nums2, n2p);
+
+        int ans = getCount(nums1, n2p);
+        ans += getCount(nums2, n1p);
+
+        return ans;
+    }
 };
 
 /*
-  Q: 1584. Min Cost to Connect All Points
+    Q: 1578. Minimum Deletion Cost to Avoid Repeating Letters
 */
 class Solution3_t
 {
+private:
 public:
-    int minCostConnectPoints(vector<vector<int>>& points) 
+    int minCost(string s, vector<int> &cost)
     {
-        
+        int ans = 0;
+        int l = s.size();
+        for (int i = 0; i < l - 1; ++i)
+        {
+            if (s[i] == s[i + 1])
+            {
+                int sum = 0;
+                int maxi = INT_MIN;
+                while (s[i] == s[i + 1])
+                {
+                    sum += cost[i];
+                    maxi = max(maxi, cost[i]);
+                    i++;
+                    if (i == l - 1)
+                    {
+                        break;
+                    }
+                }
+
+                sum += cost[i];
+                maxi = max(maxi, cost[i]);
+                ans += sum - maxi;
+            }
+        }
+
+        return ans;
     }
 };
 
 /*
-  Q: 1585. Check If String Is Transformable With Substring Sort Operations
+    Q: 1579. Remove Max Number of Edges to Keep Graph Fully Traversable
 */
-class Solution4_t 
+class Solution4_t
 {
 public:
-    bool isTransformable(string s, string t) 
+    int maxNumEdgesToRemove(int n, vector<vector<int>> &edges)
     {
-        
     }
 };
