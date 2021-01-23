@@ -9,19 +9,24 @@ class SudokuSolverT
     bool solved;
     vector< vector<uint32_t> > grid;
 
+    bool IsUnique(vector<uint32_t>& num_freq, uint32_t num)
+    {
+      if(num == 0)
+      {
+        return true;
+      }
+      num_freq[num]++;
+      return (num_freq[num] == 1);
+    }
+
     bool IsValid(uint32_t row, uint32_t col)
     {
       { //Check for row
         vector<uint32_t> num_freq(10, 0);
         vector<uint32_t>& row_vals = grid[row];
-        for(uint32_t entry : row_vals)
+        for(uint32_t num : row_vals)
         {
-          if(entry == 0)
-          {
-            continue;
-          }
-          num_freq[entry]++;
-          if(num_freq[entry] > 1)
+          if(!IsUnique(num_freq, num))
           {
             return false;
           }
@@ -32,14 +37,7 @@ class SudokuSolverT
         vector<uint32_t> num_freq(10, 0);
         for(uint32_t i = 0U; i < 9U; ++i)
         {
-          uint32_t num = grid[i][col];
-          if(num == 0)
-          {
-            continue;
-          }
-
-          num_freq[num]++;
-          if(num_freq[num] > 1)
+          if(!IsUnique(num_freq, grid[i][col]))
           {
             return false;
           }
@@ -55,14 +53,7 @@ class SudokuSolverT
         {
           for(uint32_t j = col_start; j < (col_start + 3U); ++j)
           {
-            uint32_t num = grid[i][j];
-            if(num == 0)
-            {
-              continue;
-            }
-
-            num_freq[num]++;
-            if(num_freq[num] > 1)
+            if(!IsUnique(num_freq, grid[i][j]))
             {
               return false;
             }
@@ -116,18 +107,25 @@ class SudokuSolverT
       }
     }
 
-    void FillGrid(const vector<vector<uint32_t> >& grid_)
+    bool FillGrid(const vector<vector<uint32_t> >& grid_)
     {
       for(uint32_t i = 0U; i < 9U; ++i)
       {
         for(uint32_t j = 0U; j < 9U; ++j)
         {
+          if(!IsValid(i, j))
+          {
+            return false;
+          }
+
           if(grid_[i][j] != 0)
           {
             grid[i][j] = grid_[i][j];
           }
         }
       }
+
+      return true;
     }
 
     void Solve(void)
@@ -178,7 +176,11 @@ class SudokuSolverT
 void SolvePuzzle(const vector<vector<uint32_t> >& puzzle)
 {
   SudokuSolverT sudokuSolver;
-  sudokuSolver.FillGrid(puzzle);
+  if(!sudokuSolver.FillGrid(puzzle))
+  {
+    std::cout << "Given grid is not a valid Sudoku" << endl;
+    return;
+  }
   sudokuSolver.PrintGrid();
   
   sudokuSolver.Solve();
@@ -194,22 +196,22 @@ void SolvePuzzle(const vector<vector<uint32_t> >& puzzle)
 
 int main()
 {
-  // { //Puzzle 1;
-  //   vector<vector<uint32_t> > puzzle = 
-  //   {
-  //     {5,3,0,0,7,0,0,0,0},
-  //     {6,0,0,1,9,5,0,0,0},
-  //     {0,9,8,0,0,0,0,6,0},
-  //     {8,0,0,0,6,0,0,0,3},
-  //     {4,0,0,8,0,3,0,0,1},
-  //     {7,0,0,0,2,0,0,0,6},
-  //     {0,6,0,0,0,0,2,8,0},
-  //     {0,0,0,4,1,9,0,0,5},
-  //     {0,0,0,0,8,0,0,7,9},
-  //   };
+  { //Puzzle 1;
+    vector<vector<uint32_t> > puzzle = 
+    {
+      {5,3,0,0,7,0,0,0,0},
+      {6,0,0,1,9,5,0,0,0},
+      {0,9,8,0,0,0,0,6,0},
+      {8,0,0,0,6,0,0,0,3},
+      {4,0,0,8,0,3,0,0,1},
+      {7,0,0,0,2,0,0,0,6},
+      {0,6,0,0,0,0,2,8,0},
+      {0,0,0,4,1,9,0,0,5},
+      {0,0,0,0,8,0,0,7,9},
+    };
 
-  //   SolvePuzzle(puzzle);
-  // }
+    SolvePuzzle(puzzle);
+  }
   
   // { //Puzzle 2
   //   vector<vector<uint32_t> > puzzle = 
@@ -244,6 +246,7 @@ int main()
 
   //   SolvePuzzle(puzzle);
   // }
+
   // { //Puzzle 4 - Hard2
   //   vector<vector<uint32_t> > puzzle = 
   //   {
@@ -260,6 +263,7 @@ int main()
 
   //   SolvePuzzle(puzzle);
   // }
+
   // { //Puzzle 5 - Hard3
   //   vector<vector<uint32_t> > puzzle = 
   //   {
@@ -276,22 +280,23 @@ int main()
 
   //   SolvePuzzle(puzzle);
   // }
-  { //Puzzle 6 - Hard4
-    vector<vector<uint32_t> > puzzle = 
-    {
-      {9,0,0,0,0,3,0,0,1},
-      {0,0,0,0,0,0,0,0,0},
-      {0,0,0,0,0,0,9,0,0},
-      {0,7,0,8,0,0,0,0,0},
-      {0,0,0,0,5,0,0,0,0},
-      {0,0,0,0,0,6,0,7,0},
-      {0,0,9,0,0,0,0,0,0},
-      {0,0,0,0,0,0,0,0,0},
-      {1,0,0,3,0,0,0,0,9}
-    };
 
-    SolvePuzzle(puzzle);
-  }
+  // { //Puzzle 6 - Hard4
+  //   vector<vector<uint32_t> > puzzle = 
+  //   {
+  //     {9,0,0,0,0,3,0,0,1},
+  //     {0,0,0,0,0,0,0,0,0},
+  //     {0,0,0,0,0,0,9,0,0},
+  //     {0,7,0,8,0,0,0,0,0},
+  //     {0,0,0,0,5,0,0,0,0},
+  //     {0,0,0,0,0,6,0,7,0},
+  //     {0,0,9,0,0,0,0,0,0},
+  //     {0,0,0,0,0,0,0,0,0},
+  //     {1,0,0,3,0,0,0,0,9}
+  //   };
+
+  //   SolvePuzzle(puzzle);
+  // }
 
   return 0;
 }
