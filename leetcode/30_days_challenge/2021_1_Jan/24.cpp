@@ -109,23 +109,16 @@ private:
           if(l1->val <= l2->val)
           {
             merged->next = l1;
-            merged = merged->next;
-            
             l1 = l1->next;
           }
           else
           {
-            merged->next = l2;
-            merged = merged->next;
-            
+            merged->next = l2;            
             l2 = l2->next;
           }
+          
+          merged = merged->next;
         }
-      }
-      
-      while(merged->next != nullptr)
-      {
-        merged = merged->next;
       }
       
       if(l1 != nullptr)
