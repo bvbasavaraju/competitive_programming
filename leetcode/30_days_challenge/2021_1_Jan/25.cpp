@@ -57,25 +57,41 @@ public:
   {
     int l = nums.size();
     
-    int prev_pos = INT_MIN;
+    int dist = 0;
     for(int i = 0; i < l; ++i)
     {
       if(nums[i] == 1)
       {
-        if(prev_pos == INT_MIN)
+        if((i > 0) && (dist < k))
         {
-          prev_pos = i;
+          return false;
         }
-        else
-        {
-          if((i-prev_pos-1) < k)
-          {
-            return false;
-          }
-          prev_pos = i;
-        }
+        dist = 0;
+      }
+      else
+      {
+        dist++;
       }
     }
+    // int prev_pos = INT_MIN;
+    // for(int i = 0; i < l; ++i)
+    // {
+    //   if(nums[i] == 1)
+    //   {
+    //     if(prev_pos == INT_MIN)
+    //     {
+    //       prev_pos = i;
+    //     }
+    //     else
+    //     {
+    //       if((i-prev_pos-1) < k)
+    //       {
+    //         return false;
+    //       }
+    //       prev_pos = i;
+    //     }
+    //   }
+    // }
     
     return true;
   }
