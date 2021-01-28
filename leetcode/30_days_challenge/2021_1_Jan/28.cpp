@@ -58,7 +58,23 @@ class Solution
 public:
   string getSmallestString(int n, int k) 
   {
-    string ans = "";
+    //Form end
+    string ans = string(n, 'a');
+    
+    k = k-n;  // as all positions are filled with 'a' already
+    while(n > 0)
+    {
+      int value_of_highest_letter_possible = min(25, k);
+      ans[n-1] += value_of_highest_letter_possible; // as letter selected is a, remaining count is 25 at max
+      k -= value_of_highest_letter_possible;
+      
+      n--;
+    }
+    
+    return ans;
+    
+    //For beginning
+    /*string ans = "";
     for(int i = 0; i < n-1; ++i)
     {
       char least_letter_append = 'a';
@@ -77,6 +93,6 @@ public:
     k--;  // as 'a' assumed as last character, we can reduce the k by 1 and add the remaining value to letter 'a'.
     ans += ('a' + k);
     
-    return ans;
+    return ans;*/
   }
 };
