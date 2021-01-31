@@ -99,10 +99,3 @@ public:
     return min(ans, abs(pq.top() - mini));
   }
 };
-
-int main()
-{
-  Solution s;
-  vector<int> v = {4,1,5,20,3};
-  s.minimumDeviation(v);
-}
