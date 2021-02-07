@@ -5,7 +5,7 @@ Time expiration : 0
 Not Solved : 0
 Wrong Answer/ Partial result : 1  //this was corrected after looking at the discussion
 
-link: https://leetcode.com/contest/weekly-contest-225
+link: https://leetcode.com/contest/weekly-contest-226
 ****************************************************/
 
 #include <iostream>
