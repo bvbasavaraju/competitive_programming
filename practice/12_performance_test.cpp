@@ -3,6 +3,15 @@
 
 using namespace std;
 
+/*
+  This test shows the capability of the CPU (core) n single threaded.
+  If the CPU has good number of Instruction decoder (4 or 8) then the CPU will be able to execute more instructions per cycle.
+  Basically instruction pipelining is much better if this program executes faster.
+
+  For M1 it is 8 channel wide instructions decodeer. ans in 1 Core there can only be 1 thread. Unlike x86!
+  So, Hyperthreading is not possible in M1!!.
+*/
+
 class DummyClass_t
 {
 private:
