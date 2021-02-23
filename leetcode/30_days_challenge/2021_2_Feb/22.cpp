@@ -67,21 +67,45 @@ public:
   string findLongestWord(string s, vector<string>& d) 
   {
     string ans = "";
-    for(string& word : d)
+    vector<int> wi(d.size(), 0);
+    for(int ch : s)
     {
-      if(isMatch(s, word))
+      int wp = 0;
+      for(string& word : d)
       {
-        if(ans.size() < word.size())
+        int& i = wi[wp];
+        if(i < word.size() && word[i] == ch)
         {
-          ans = word;
+          i++;
+          
+          if(i == word.size())
+          {
+            ans = ans.size() < word.size() ? word : ans.size() == word.size() ? min(ans, word) : ans;
+          }
         }
-        else if(ans.size() == word.size())
-        {
-          ans = min(ans, word);
-        }
+        
+        wp++;
       }
     }
     
     return ans;
+//     string ans = "";
+//     for(string& word : d)
+//     {
+//       if(isMatch(s, word))
+//       {
+//         if(ans.size() < word.size())
+//         {
+//           ans = word;
+//         }
+//         else if(ans.size() == word.size())
+//         {
+//           ans = min(ans, word);
+//         }
+//       }
+//     }
+    
+//     return ans;
   }
 };
+
