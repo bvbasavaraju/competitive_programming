@@ -63,8 +63,7 @@ class FreqStack
 private:
   
   unordered_map<int, int> freq;
-  unordered_map<int, int> freqCount;
-  stack<pair<int, int>> data;
+  unordered_map<int, stack<int>> collections;
   int count;
 public:
   FreqStack() 
@@ -75,48 +74,84 @@ public:
   void push(int x) 
   {
     freq[x]++;
-    data.push({x, freq[x]});
-    
+    collections[freq[x]].push(x);
     count = max(count, freq[x]);
-    freqCount[freq[x]]++;
   }
 
   int pop() 
   {
-    stack<pair<int, int>> temp;
+    int ans = collections[count].top();
+    collections[count].pop();
+    freq[ans]--;
     
-    int ans;
-    while(!data.empty())
+    if(collections[count].empty())
     {
-      pair<int, int> d = data.top();
-      data.pop();
-      
-      if(d.second == count)
-      {
-        ans = d.first;
-        freq[ans]--;
-        freqCount[count]--;
-        if(freqCount[count] <= 0)
-        {
-          count--;
-        }
-        break;
-      }
-      else
-      {
-        temp.push(d);
-      }
-    }
-    
-    while(!temp.empty())
-    {
-      data.push(temp.top());
-      temp.pop();
+      count--;
     }
     
     return ans;
   }
 };
+
+// class FreqStack 
+// {
+// private:
+  
+//   unordered_map<int, int> freq;
+//   unordered_map<int, int> freqCount;
+//   stack<pair<int, int>> data;
+//   int count;
+// public:
+//   FreqStack() 
+//     : count(0)
+//   {
+//   }
+
+//   void push(int x) 
+//   {
+//     freq[x]++;
+//     data.push({x, freq[x]});
+    
+//     count = max(count, freq[x]);
+//     freqCount[freq[x]]++;
+//   }
+
+//   int pop() 
+//   {
+//     stack<pair<int, int>> temp;
+    
+//     int ans;
+//     while(!data.empty())
+//     {
+//       pair<int, int> d = data.top();
+//       data.pop();
+      
+//       if(d.second == count)
+//       {
+//         ans = d.first;
+//         freq[ans]--;
+//         freqCount[count]--;
+//         if(freqCount[count] <= 0)
+//         {
+//           count--;
+//         }
+//         break;
+//       }
+//       else
+//       {
+//         temp.push(d);
+//       }
+//     }
+    
+//     while(!temp.empty())
+//     {
+//       data.push(temp.top());
+//       temp.pop();
+//     }
+    
+//     return ans;
+//   }
+// };
 
 /**
  * Your FreqStack object will be instantiated and called as such:
