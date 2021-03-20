@@ -90,11 +90,12 @@ using namespace std;
     Use two hash tables. The first to save the check-in time for a customer and the second to update the total time between two stations.
 */
 
+//Faster solution!! always use reference!!
 class UndergroundSystem 
 {
 private:
   unordered_map<int, std::pair<string, int> > idStationMap;
-  map<string, map<string, vector<int> > > data;
+  unordered_map<string, unordered_map<string, vector<double> > > data;
   
 public:
   UndergroundSystem() 
@@ -108,28 +109,69 @@ public:
 
   void checkOut(int id, string stationName, int t) 
   {
-    std::pair<string, int> startData = idStationMap[id];
+    std::pair<string, int>& startData = idStationMap[id];
     
-    data[startData.first][stationName].push_back(t - startData.second);
+    if(data[startData.first][stationName].empty())
+    {
+      data[startData.first][stationName] = {(t - startData.second) * 1.0, 1.0};  
+    }
+    else
+    {
+      vector<double>& timeData = data[startData.first][stationName];
+      timeData[0] += (t - startData.second) * 1.0;
+      timeData[1]++;
+    }
   }
 
   double getAverageTime(string startStation, string endStation) 
-  {
-    map<string, vector<int> > data_ = data[startStation];
+  {    
+    vector<double>& timeData = data[startStation][endStation];
     
-    vector<int>& time = data_[endStation];
-    
-    double sum = 0.0;
-    for(int t : time)
-    {
-      sum += (t * 1.0);
-    }
-    
-    double ans = ((sum / time.size()) * 100000 ) / 100000;
-    
+    double ans = ((timeData[0] / timeData[1]) * 100000 ) / 100000;
     return ans;
   }
 };
+
+// class UndergroundSystem 
+// {
+// private:
+//   unordered_map<int, std::pair<string, int> > idStationMap;
+//   map<string, map<string, vector<int> > > data;
+  
+// public:
+//   UndergroundSystem() 
+//   {    
+//   }
+
+//   void checkIn(int id, string stationName, int t) 
+//   {
+//     idStationMap[id] = std::make_pair(stationName, t);
+//   }
+
+//   void checkOut(int id, string stationName, int t) 
+//   {
+//     std::pair<string, int> startData = idStationMap[id];
+    
+//     data[startData.first][stationName].push_back(t - startData.second);
+//   }
+
+//   double getAverageTime(string startStation, string endStation) 
+//   {
+//     map<string, vector<int> > data_ = data[startStation];
+    
+//     vector<int>& time = data_[endStation];
+    
+//     double sum = 0.0;
+//     for(int t : time)
+//     {
+//       sum += (t * 1.0);
+//     }
+    
+//     double ans = ((sum / time.size()) * 100000 ) / 100000;
+    
+//     return ans;
+//   }
+// };
 
 /**
  * Your UndergroundSystem object will be instantiated and called as such:
