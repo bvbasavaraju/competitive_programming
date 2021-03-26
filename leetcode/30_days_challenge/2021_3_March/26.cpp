@@ -58,54 +58,56 @@ using namespace std;
     All words in A[i] are unique: there isn't i != j with A[i] == A[j].
 */
 
+// Much faster solution. Lesson Learnt => Vectors are much faster in accessibility. if we do not have to seach for something!!
 class Solution 
 {
+private:
+  void getCount(const string& str, vector<int>& count)
+  {
+    for(char ch : str)
+    {
+      count[ch-'a']++;
+    }
+  }
+  
 public:
   vector<string> wordSubsets(vector<string>& A, vector<string>& B) 
   {
-    unordered_map<int, int> bFreq;
+    vector<int> temp;
+    vector<int> bCount(26, 0);
     for(string& str : B)
     {
-      unordered_map<int, int> freq;
-      for(char& ch : str)
-      {
-        freq[ch]++;
-      }
+      temp.clear();
+      temp.resize(26, 0);
+      getCount(str, temp);
       
-      for(auto& it : freq)
+      for(int i = 0; i < 26; ++i)
       {
-        if((bFreq.find(it.first) == bFreq.end()) || (bFreq[it.first] < it.second))
-        {
-          bFreq[it.first] = it.second;
-        }
+        bCount[i] = max(bCount[i], temp[i]);
       }
     }
     
     vector<string> ans;
     
-    bool add = true;
+    int i = 0;
     int l = A.size();
-    for(int i = 0; i < l; ++i)
+    for(int j = 0; j < l; ++j)
     {
-      string& str = A[i];
+      string& str = A[j];
       
-      unordered_map<int, int> freq;
-      for(char& ch : str)
-      {
-        freq[ch]++;
-      }
+      temp.clear();
+      temp.resize(26, 0);
+      getCount(str, temp);
       
-      add = true;
-      for(auto& it : bFreq)
+      for(i = 0; i < 26; ++i)
       {
-        if((freq.find(it.first) == freq.end()) || (freq[it.first] < it.second))
+        if(temp[i] < bCount[i])
         {
-          add = false;
           break;
         }
       }
       
-      if(add)
+      if(i == 26)
       {
         ans.push_back(str);
       }
@@ -115,3 +117,70 @@ public:
     return ans;
   }
 };
+
+//Slower solution!!
+// class Solution 
+// {
+// public:
+//   vector<string> wordSubsets(vector<string>& A, vector<string>& B) 
+//   {
+//     unordered_map<int, int> bFreq;
+//     for(string& str : B)
+//     {
+//       unordered_map<int, int> freq;
+//       for(char& ch : str)
+//       {
+//         freq[ch]++;
+//       }
+      
+//       for(auto& it : freq)
+//       {
+//         if((bFreq.find(it.first) == bFreq.end()) || (bFreq[it.first] < it.second))
+//         {
+//           bFreq[it.first] = it.second;
+//         }
+//       }
+//     }
+    
+//     vector<string> ans;
+    
+//     bool add = true;
+//     int l = A.size();
+//     for(int i = 0; i < l; ++i)
+//     {
+//       string& str = A[i];
+      
+//       unordered_map<int, int> freq;
+//       for(char& ch : str)
+//       {
+//         freq[ch]++;
+//       }
+      
+//       add = true;
+//       for(auto& it : bFreq)
+//       {
+//         if((freq.find(it.first) == freq.end()) || (freq[it.first] < it.second))
+//         {
+//           add = false;
+//           break;
+//         }
+//       }
+      
+//       if(add)
+//       {
+//         ans.push_back(str);
+//       }
+//     }
+    
+    
+//     return ans;
+//   }
+// };
+
+int main()
+{
+  Solution s;
+  vector<string> A = {"amazon","apple","facebook","google","leetcode"};
+  vector<string> B = {"e","o"};
+  s.wordSubsets(A, B);
+}
