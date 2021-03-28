@@ -13,6 +13,11 @@ using namespace std;
                 + Insert -> 2 * Log(n)
                 + Search -> 2 * Log(n)
                 + Delete -> 2 * Log(n)
+
+        References:
+          + https://www.cs.princeton.edu/~rs/talks/LLRB/RedBlack.pdf
+          + Coursera -> Algorithms, Part I 
+                        by Robert Sedgewick
 */
 
 class RedBlackTree_t
@@ -78,7 +83,7 @@ private:
             return node;
         }
 
-        shared_ptr<Node_t> temp = node;
+        shared_ptr<Node_t> temp = node->left;
         node->left = temp->right;
         temp->right = node;
         temp->color = node->color;
@@ -173,6 +178,41 @@ private:
         return node;
     }
 
+    shared_ptr<Node_t> MoveRedLeft(shared_ptr<Node_t> node)
+    {
+      if(node == nullptr)
+      {
+        return node;
+      }
+
+      FlipColors(node);
+      if((node->right != nullptr) && IsRed(node->right->left))
+      {
+        node->right = RotateRight(node->right);
+        node = RotateLeft(node);
+        FlipColors(node);
+      }
+
+      return node;
+    }
+
+    shared_ptr<Node_t> MoveRedRight(shared_ptr<Node_t> node)
+    {
+      if(node == nullptr)
+      {
+        return node;
+      }
+
+      FlipColors(node);
+      if((node->left != nullptr) && IsRed(node->left->left))
+      {
+        node = RotateLeft(node);
+        FlipColors(node);
+      }
+
+      return node;
+    }
+
     shared_ptr<Node_t> MinimumChildNode(shared_ptr<Node_t> node)
     {
         if ((node == nullptr) || ((node->left == nullptr) && (node->right == nullptr)))
@@ -222,34 +262,66 @@ private:
             return node;
         }
 
-        if (key < node->key)
+        int compareResult = (key < node->key) ? -1 : ((key > node->key) ? 1 : 0 );
+        if (compareResult)
         {
-            node->left = Delete(node->left, key);
+          if(!IsRed(node->left) && (node->left != nullptr) && !IsRed(node->left->left))
+          {
+            node = MoveRedLeft(node);
+          }
+
+          node->left = Delete(node->left, key);
         }
-        else if (key > node->key)
-        {
-            node->right = Delete(node->right, key);
-        }
+        // else if (key > node->key)
+        // {
+        //     node->right = Delete(node->right, key);
+        // }
         else
         {
-            if (node->right == nullptr)
-            {
-                return node->left;
-            }
-            if (node->left == nullptr)
-            {
-                return node->right;
-            }
+          if(IsRed(node->left))
+          {
+            node = RotateRight(node);
+          }
 
-            shared_ptr<Node_t> temp = node;
-            node = MinimumChildNode(temp->right);
-            node->right = DeleteMinimum(temp->right);
-            node->left = temp->left;
-            node->color = Color_t::RED;
-            node = RotateOrFlipColorIfRequired(node);
+          if((compareResult == 0) && (node->right == nullptr))
+          {
+            return nullptr;
+          }
+
+          if(!IsRed(node->right) && (node->right != nullptr) && !IsRed(node->right->left))
+          {
+            node = MoveRedRight(node);
+          }
+
+          if(compareResult == 0)
+          {
+            node = MinimumChildNode(node->right);
+            node->right = DeleteMinimum(node->right);
+          }
+          else
+          {
+            node->right = Delete(node->right, key);
+          }
+          
+
+            // if (node->right == nullptr)
+            // {
+            //     return node->left;
+            // }
+            // if (node->left == nullptr)
+            // {
+            //     return node->right;
+            // }
+
+            // shared_ptr<Node_t> temp = node;
+            // node = MinimumChildNode(temp->right);
+            // node->right = DeleteMinimum(temp->right);
+            // node->left = temp->left;
+            // node->color = Color_t::RED;
+            // node = RotateOrFlipColorIfRequired(node);
         }
 
-        return node;
+        return RotateOrFlipColorIfRequired(node);
     }
 
     void Print(shared_ptr<Node_t> node, int spacesToPrint)
@@ -322,6 +394,20 @@ int main()
     {
         redBlackTree.Add(i, i);
     }
+
+    // redBlackTree.Add(10, 10);
+    // redBlackTree.Add(18, 18);
+    // redBlackTree.Add(7, 7);
+    // redBlackTree.Add(15, 15);
+    // redBlackTree.Add(16, 16);
+    // redBlackTree.Add(30, 30);
+    // redBlackTree.Add(25, 25);
+    // redBlackTree.Add(40, 40);
+    // redBlackTree.Add(60, 60);
+    // redBlackTree.Add(2, 2);
+    // redBlackTree.Add(1, 1);
+    // redBlackTree.Add(70, 70);
+
 
     //redBlackTree.Delete(12);
 
