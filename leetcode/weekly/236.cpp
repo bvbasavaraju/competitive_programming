@@ -7,7 +7,7 @@ Wrong Answer/ Partial result : 0
 
 Note: Solved it after the contest as I could not make it!!. Able to solve only 1!!
 
-link: https://leetcode.com/contest/weekly-contest-235
+link: https://leetcode.com/contest/weekly-contest-236
 ****************************************************/
 
 #include <iostream>
