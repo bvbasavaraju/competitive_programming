@@ -58,7 +58,7 @@ class WordFilter
 private:
   vector<string> words;
   
-  unordered_map<char, vector<int> > indexs; 
+  unordered_map<char, vector<int> > indexes; 
 public:
   WordFilter(vector<string>& words_) 
   {
@@ -69,7 +69,7 @@ public:
     {
       if(s.size() > 0)
       {
-        indexs[s[0]].push_back(i);
+        indexes[s[0]].push_back(i);
       }
       
       i++;
@@ -83,15 +83,15 @@ public:
       return -1;
     }
     
-    vector<int>& indexs_ = indexs[prefix[0]];
+    vector<int>& indexes_ = indexes[prefix[0]];
     
-    int p = indexs_.size() - 1;
+    int p = indexes_.size() - 1;
     for( ;p >= 0; --p)
     {      
       int lp = prefix.size();
       int ls = suffix.size();
       
-      string& word = words[indexs_[p]];
+      string& word = words[indexes_[p]];
         
       int ld = word.size();
       if((ld < lp) || (ld < ls))
@@ -125,7 +125,7 @@ public:
       
       if(matched)
       {
-        return indexs_[p];
+        return indexes_[p];
       }
     }
     
