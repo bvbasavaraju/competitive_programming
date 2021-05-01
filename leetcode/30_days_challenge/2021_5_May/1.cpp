@@ -56,16 +56,20 @@ using namespace std;
 class WordFilter 
 {
 private:
-  unordered_map<char, vector< std::pair<string, int> > > data; 
+  vector<string> words;
+  
+  unordered_map<char, vector<int> > indexs; 
 public:
-  WordFilter(vector<string>& words) 
+  WordFilter(vector<string>& words_) 
   {
+    words = words_;
+    
     int i = 0;
-    for(string& s : words)
+    for(string& s : words_)
     {
       if(s.size() > 0)
       {
-        data[s[0]].push_back({s, i});
+        indexs[s[0]].push_back(i);
       }
       
       i++;
@@ -79,17 +83,17 @@ public:
       return -1;
     }
     
-    vector<std::pair< string, int> >& data_ = data[prefix[0]];
+    vector<int>& indexs_ = indexs[prefix[0]];
     
-    int p = data_.size() - 1;
+    int p = indexs_.size() - 1;
     for( ;p >= 0; --p)
     {      
       int lp = prefix.size();
       int ls = suffix.size();
       
-      std::pair<string, int>& d = data_[p];
-      
-      int ld = d.first.size();
+      string& word = words[indexs_[p]];
+        
+      int ld = word.size();
       if((ld < lp) || (ld < ls))
       {
         continue;
@@ -98,7 +102,7 @@ public:
       bool matched = false;
       for(int i = 0, j = ls-1; ;)
       {
-        if(d.first[i] != prefix[i] || d.first[ld-(ls-j)] != suffix[j])
+        if(word[i] != prefix[i] || word[ld-(ls-j)] != suffix[j])
         {
           break;
         }
@@ -121,7 +125,7 @@ public:
       
       if(matched)
       {
-        return d.second;
+        return indexs_[p];
       }
     }
     
@@ -134,3 +138,86 @@ public:
  * WordFilter* obj = new WordFilter(words);
  * int param_1 = obj->f(prefix,suffix);
  */
+
+// //Little slower
+// class WordFilter 
+// {
+// private:
+//   unordered_map<char, vector< std::pair<string, int> > > data; 
+// public:
+//   WordFilter(vector<string>& words) 
+//   {
+//     int i = 0;
+//     for(string& s : words)
+//     {
+//       if(s.size() > 0)
+//       {
+//         data[s[0]].push_back({s, i});
+//       }
+      
+//       i++;
+//     }
+//   }
+
+//   int f(string prefix, string suffix) 
+//   {
+//     if(prefix.size() <= 0)
+//     {
+//       return -1;
+//     }
+    
+//     vector<std::pair< string, int> >& data_ = data[prefix[0]];
+    
+//     int p = data_.size() - 1;
+//     for( ;p >= 0; --p)
+//     {      
+//       int lp = prefix.size();
+//       int ls = suffix.size();
+      
+//       std::pair<string, int>& d = data_[p];
+      
+//       int ld = d.first.size();
+//       if((ld < lp) || (ld < ls))
+//       {
+//         continue;
+//       }
+      
+//       bool matched = false;
+//       for(int i = 0, j = ls-1; ;)
+//       {
+//         if(d.first[i] != prefix[i] || d.first[ld-(ls-j)] != suffix[j])
+//         {
+//           break;
+//         }
+
+//         if((i == lp-1) && (j == 0))
+//         {
+//           matched = true;
+//           break;
+//         }
+
+//         if(i < lp-1)
+//         {
+//           i++;
+//         }
+//         if(j > 0)
+//         {
+//           j--;
+//         }
+//       }
+      
+//       if(matched)
+//       {
+//         return d.second;
+//       }
+//     }
+    
+//     return -1;
+//   }
+// };
+
+// /**
+//  * Your WordFilter object will be instantiated and called as such:
+//  * WordFilter* obj = new WordFilter(words);
+//  * int param_1 = obj->f(prefix,suffix);
+//  */
