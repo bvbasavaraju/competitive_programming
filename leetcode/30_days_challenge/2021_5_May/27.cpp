@@ -52,54 +52,79 @@ using namespace std;
 class Solution 
 {
 private:
-  bool isUnique(vector<int>& f1, vector<int>& f2)
-  {
-    for(int i = 0; i < 26; ++i)
-    {
-      if(f1[i] > 0 && f2[i] > 0)
-      {
-        return false;
-      }
-    }
+//   bool isUnique(vector<int>& f1, vector<int>& f2)
+//   {
+//     for(int i = 0; i < 26; ++i)
+//     {
+//       if(f1[i] > 0 && f2[i] > 0)
+//       {
+//         return false;
+//       }
+//     }
 
-    return true;
-  }
+//     return true;
+//   }
   
-  void calcFreq(const string& s, vector<int>& freq)
-  {
-    if(freq.size() == 26)
-    {
-      return;
-    }
+//   void calcFreq(const string& s, vector<int>& freq)
+//   {
+//     if(freq.size() == 26)
+//     {
+//       return;
+//     }
     
-    freq.resize(26, 0);
-    for(char ch : s)
-    {
-      freq[ch-'a']++;
-    }
-  }
-  
+//     freq.resize(26, 0);
+//     for(char ch : s)
+//     {
+//       freq[ch-'a']++;
+//     }
+//   }
+
 public:
   int maxProduct(vector<string>& words) 
   {
     int ans = 0;
     int l = words.size();
-    vector< vector<int> > freq(l, vector<int>(0, 0));
+    
+    vector<int> letters;
+    for(string& w : words)
+    {
+      int count = 0;
+      for(char ch : w)
+      {
+        count |= (1 << (ch-'a'));
+      }
+      
+      letters.push_back(count);
+    }
     
     for(int i = 0; i < l-1; ++i)
-    {
-      calcFreq(words[i], freq[i]);
+    {      
       for(int j = i+1; j < l; ++j)
-      {
-        calcFreq(words[j], freq[j]);
-        
-        if(isUnique(freq[i], freq[j]))
+      {   
+        if((letters[i] & letters[j]) == 0)
         {
           int p = words[i].size() * words[j].size();
           ans = max(ans, p);
         }
       }
     }
+    //Slower solution
+//     vector< vector<int> > freq(l, vector<int>(0, 0));
+    
+//     for(int i = 0; i < l-1; ++i)
+//     {
+//       calcFreq(words[i], freq[i]);
+//       for(int j = i+1; j < l; ++j)
+//       {
+//         calcFreq(words[j], freq[j]);
+        
+//         if(isUnique(freq[i], freq[j]))
+//         {
+//           int p = words[i].size() * words[j].size();
+//           ans = max(ans, p);
+//         }
+//       }
+//     }
     
     return ans;
   }
