@@ -8,6 +8,21 @@ Wrong Answer/ Partial result : 1
 link: https://leetcode.com/contest/weekly-contest-243
 ****************************************************/
 
+#include <iostream>
+#include <vector>
+#include <list>
+#include <algorithm>
+#include <string>
+#include <stack>
+#include <queue>
+#include <map>
+#include <set>
+#include <unordered_map>
+#include <unordered_set>
+#include <cmath>
+
+using namespace std;
+
 /*
   Q: 1880. Check if Word Equals Summation of Two Words
 */
@@ -81,7 +96,7 @@ class Solution3_t
   {
     bool operator()(const pair<int, int>& p1, const pair<int, int>& p2)
     {
-      return p1.first >= p2.first;
+      return (p1.first > p2.first) || ((p1.first == p2.first) && p1.second > p2.second);
     }
   };
   
@@ -89,9 +104,26 @@ class Solution3_t
   {
     bool operator()(const pair<int, pair<int, int> >& p1, const pair<int, pair<int, int> >& p2)
     {
-      return p1.second.second >= p2.second.second;
+      if(p1.second.second > p2.second.second)
+      {
+        return true;
+      }
+      else if(p1.second.second == p2.second.second)
+      {
+        if(p1.first > p2.first)
+        {
+          return true;
+        }
+        else if(p1.first == p2.first)
+        {
+          return p1.second.first > p2.second.first;
+        }
+      }
+
+      return false;
     }
   };
+  
 public:
   vector<int> assignTasks(vector<int>& servers, vector<int>& tasks) 
   {
@@ -110,19 +142,20 @@ public:
     int mt = 0;
     for(i = 0; i < tl; ++i)
     {
-      mt++;
       if(!ser.empty())
       {
         ans[i] = ser.top().second;
-        busy.push(make_pair(ser.top().first, make_pair(ser.top().second, ser.top().first + tasks[i])));
+        busy.push(make_pair(ser.top().first, make_pair(ser.top().second, mt + tasks[i])));
         ser.pop();
       }
-      
+
+      mt++;
       if(!busy.empty())
       {
-        if(busy.top().second.second >= mt)
+        if(busy.top().second.second <= mt)
         {
           ser.push(make_pair(busy.top().first, busy.top().second.first));
+          busy.pop();
         }
         
         while(ser.empty())
@@ -153,3 +186,14 @@ public:
       
   }
 };
+
+int main()
+{
+  Solution3_t s3;
+  vector<int> v1 = {3,3,2};
+  vector<int> v2 = {1,2,3,2,1,2};
+
+  s3.assignTasks(v1, v2);
+
+  return 0;
+}

@@ -10,6 +10,21 @@ note: 1 problem has been solved after looking at solution
 link: https://leetcode.com/contest/weekly-contest-242
 ****************************************************/
 
+#include <iostream>
+#include <vector>
+#include <list>
+#include <algorithm>
+#include <string>
+#include <stack>
+#include <queue>
+#include <map>
+#include <set>
+#include <unordered_map>
+#include <unordered_set>
+#include <cmath>
+
+using namespace std;
+
 /*
   Q: 1869. Longer Contiguous Segments of Ones than Zeros
 */
