@@ -1,7 +1,7 @@
 /****************************************************
-Date: June 14th
+Date: June 15th
 
-link: https://leetcode.com/explore/challenge/card/june-leetcoding-challenge-2021/604/week-2-june-8th-june-14th/3772/
+link: https://leetcode.com/explore/challenge/card/june-leetcoding-challenge-2021/605/week-3-june-15th-june-21st/3781/
 ****************************************************/
 
 #include <iostream>
