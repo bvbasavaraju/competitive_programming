@@ -1,0 +1,63 @@
+/*
+  Q: 81. Search in Rotated Sorted Array II
+*/
+#include <iostream>
+#include <vector>
+#include <list>
+#include <algorithm>
+#include <string>
+#include <stack>
+#include <queue>
+#include <map>
+#include <set>
+#include <unordered_map>
+#include <unordered_set>
+#include <cmath>
+
+using namespace std;
+
+class Solution 
+{
+public:
+  bool canPlaceFlowers(vector<int>& flowerbed, int n) 
+  {
+    int l = flowerbed.size();
+    
+    int p1 = -1;
+    int p2 = -1;
+    int zero_count = 0;
+    for(int i = 0; i < l; ++i)
+    {
+      if(flowerbed[i] == 0)
+      {
+        zero_count++;
+        continue;
+      }
+      else
+      {
+        p1= p2;
+        p2 = i;
+        
+        n -= ((p1 < 0) ? (zero_count / 2) : ((zero_count - 1)/2));
+        zero_count = 0;
+        
+        if(n <= 0)
+        {
+          break;
+        }
+      }
+    }
+    
+    if(zero_count > 0 && n > 0)
+    {
+      if((p1 < 0 && p2 < 0) || (p1 >= 0 && p2 < l-1))
+      {
+        zero_count++;
+      }
+      
+      n -= ((p1 < 0) ? (zero_count / 2) : ((zero_count - 1)/2));
+    }
+    
+    return n <= 0 ? true : false;
+  }
+};
