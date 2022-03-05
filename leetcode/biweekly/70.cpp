@@ -5,7 +5,7 @@ Time expiration : 0
 Not Solved : 2
 Wrong Answer/ Partial result : 1
 
-link: https://leetcode.com/contest/biweekly-contest-53
+link: https://leetcode.com/contest/biweekly-contest-70
 ****************************************************/
 
 #include <iostream>
