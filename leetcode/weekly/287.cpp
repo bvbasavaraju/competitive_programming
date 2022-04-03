@@ -113,16 +113,15 @@ public:
 };
 
 /*
-  Q: 2227. Encrypt and Decrypt Strings - TLE
+  Q: 2227. Encrypt and Decrypt Strings - TLE was returned for commented code!! later fixed checking at discussion!!
 */
 class Encrypter 
 {
-  //TODO: instead of keeping the value_keys and dict,
-  // for each entry in dictionary, encrypt and keep the count of encrypted value!!
 private:
   unordered_map<char, string> key_values;
-  unordered_map< string, vector<string> > values_key;
-  unordered_set<string> dict;
+  //unordered_map< string, vector<string> > values_key;
+  //unordered_set<string> dict;
+  unordered_map<string, int> count;
   
   vector<string> getAllPossibleStrs(vector<string>& appendWith, vector<string>& ans)
   {
@@ -150,12 +149,13 @@ public:
       for(int i = 0; i < l; ++i)
       {
         key_values[keys[i]] = values[i];
-        values_key[values[i]].push_back(std::string(1, keys[i]));
+        //values_key[values[i]].push_back(std::string(1, keys[i]));
       }
       
       for(string& d : dictionary)
       {
-        dict.insert(d);
+        count[encrypt(d)]++;
+        //dict.insert(d);
       }
     }
     
@@ -172,30 +172,31 @@ public:
     
     int decrypt(string word2) 
     {
-      vector<string> possibleAns;
-      int l = word2.size()/2;
-      for(int i = 0; i < l; ++i)
-      {
-        string str = word2.substr(i*2, 2);
-        vector<string> matchingKeys = values_key[str];
+      return count[word2];
+//       vector<string> possibleAns;
+//       int l = word2.size()/2;
+//       for(int i = 0; i < l; ++i)
+//       {
+//         string str = word2.substr(i*2, 2);
+//         vector<string> matchingKeys = values_key[str];
         
-        possibleAns = getAllPossibleStrs(matchingKeys, possibleAns);
-        if(possibleAns.empty())
-        {
-          break;
-        }
-      }
+//         possibleAns = getAllPossibleStrs(matchingKeys, possibleAns);
+//         if(possibleAns.empty())
+//         {
+//           break;
+//         }
+//       }
             
-      vector<string> ans;
-      for(string& pa : possibleAns)
-      {
-        if(dict.find(pa) != dict.end())
-        {
-          ans.push_back(pa);
-        }
-      }
+//       vector<string> ans;
+//       for(string& pa : possibleAns)
+//       {
+//         if(dict.find(pa) != dict.end())
+//         {
+//           ans.push_back(pa);
+//         }
+//       }
       
-      return ans.size();
+//       return ans.size();
     }
 };
 
