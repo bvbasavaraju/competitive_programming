@@ -6,7 +6,7 @@ Memory limit exceeded : 1
 Not Solved : 1
 Wrong Answer/ Partial result : 0
 
-link: https://leetcode.com/contest/biweekly-contest-79
+link: https://leetcode.com/contest/biweekly-contest-78
 ****************************************************/
 
 #include <bits/stdc++.h>
