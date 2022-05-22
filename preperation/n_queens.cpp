@@ -7,21 +7,37 @@ class Solution
 private:
   bool isAllowed(vector<string> grid, int row, int col, int n)
   {
-    if(row == 0)
+    //check row
+    for(int i = col; i >= 0; --i)
     {
-      return true;
+      if(grid[row][i] == 'Q')
+      {
+        return false;
+      }
     }
-    
-    if((col < n-1 && grid[row-1][col+1] == 'Q') 
-       || (col > 0 && grid[row-1][col-1] == 'Q')
-       || (grid[row-1][col] == 'Q'))
-     {
-       return false;
-     }
-    
-    for(int i = row-1; i >= 0; --i)
+
+    //check col
+    for(int i = row; i >= 0; --i)
     {
       if(grid[i][col] == 'Q')
+      {
+        return false;
+      }
+    }
+
+    //check left diag
+    for(int i = row, j = col; i >= 0 && j >= 0; --i, --j)
+    {
+      if(grid[i][j] == 'Q')
+      {
+        return false;
+      }
+    }
+
+    //check right diag
+    for(int i = row, j = col; i >= 0 && j < n; --i, ++j)
+    {
+      if(grid[i][j] == 'Q')
       {
         return false;
       }
@@ -43,10 +59,6 @@ private:
       if(isAllowed(grid, r, i, n))
       {
         grid[r][i] = 'Q';
-        // if(solve(r+1, n, grid, ans))
-        // {
-        //   return true;
-        // }
         solve(r+1, n, grid, ans);
         grid[r][i] = '.';
       }
