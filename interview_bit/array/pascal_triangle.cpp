@@ -2,29 +2,36 @@
 
 using namespace std;
 
-vector<int> Solution::getRow(int A) 
+//Generate!
+vector<vector<int> > Solution::solve(int A) 
 {
-    vector<vector<int>> grid(A+1, vector<int>(A+1, 0));
-
-    for(int i = 0; i <= A; ++i)
+    vector<vector<int>> ans;
+    if(A <= 0)
     {
-        for(int j = 0; j <= A; ++j)
-        {
-            if(i == 0 || j == 0)
-            {
-                grid[i][j] = 1;
-                continue;
-            }
-
-            grid[i][j] = grid[i][j-1] + grid[i-1][j];
-        }
+        return ans;
     }
 
-    vector<int> ans;
-    for(int i = A, j = 0; i >= 0 && j <= A ; --i, ++j)
+    ans.push_back({1});
+    if(A == 1)
     {
-        ans.push_back(grid[i][j]);
+        return ans;
+    }
+
+    ans.push_back({1,1});
+    for(int i = 2; i < A; ++i)
+    {
+        int currentRowSize = ans.back().size() + 1;
+        vector<int> row(currentRowSize);
+        for(int j = 1; j < currentRowSize - 1; ++j)
+        {
+            row[j] = ans[i-1][j] + ans[i-1][j-1];
+        }
+        row[0] = 1;
+        row[currentRowSize-1] = 1;
+
+        ans.push_back(row);
     }
 
     return ans;
 }
+
