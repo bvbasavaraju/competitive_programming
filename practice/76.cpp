@@ -1,15 +1,14 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-//TODO: resulting in wrong answer!!
 class Solution 
-{
-private:
-  bool isTargetPresentInSource(const string& target, const vector<int>& tFreq, const vector<int>& sFreq)
-  {    
-    for(char ch : target)
+{  
+private:  
+  bool hasTarget(vector<int>& tFreq, vector<int>& sFreq)
+  {
+    for(int i = 0; i < 128; ++i)
     {
-      if(tFreq[ch] != sFreq[ch])
+      if(tFreq[i] > sFreq[i])
       {
         return false;
       }
@@ -17,58 +16,53 @@ private:
     
     return true;
   }
-  
 public:
   string minWindow(string s, string t) 
   {
+    int sl = s.size();
+    int tl = t.size();
+    
+    if(tl > sl)
+    {
+      return "";
+    }
+    
+    vector<int> sFreq(128, 0);
     vector<int> tFreq(128, 0);
     for(char ch : t)
     {
       tFreq[ch]++;
     }
     
-    vector<int> sFreq(128, 0);
-    for(int i = 0; i < t.size() && i < s.size(); ++i)
+    for(int i = 0; i < tl; ++i)
     {
       sFreq[s[i]]++;
     }
     
-    int i = t.size();
-    int len = INT_MAX;
-    pair<int, int> ans = {};
-    vector<int> sFreqTemp = sFreq;
-    while(i < s.size())
+    if(sFreq == tFreq)
     {
-      for(int j = i; j < s.size(); ++j)
+      return s.substr(0, tl);
+    }
+    
+    int i = tl;
+    pair<int, int> p = {0, 0};
+    pair<int, int> minPair{-1, -1};
+    while(i < sl)
+    {
+      sFreq[s[i]]++;
+      while(hasTarget(tFreq, sFreq))
       {
-        int start = j-i;
-        int end = j;
-        if(isTargetPresentInSource(t, tFreq, sFreq))
+        p.second = i;
+        if(minPair.first == -1 || (minPair.second - minPair.first) > (p.second- p.first))
         {
-          if((end - start + 1) < len)
-          {
-            len = end-start + 1;
-            ans = {start, end};
-          }
+          minPair = p;
         }
-
-        sFreq[s[start]]--;
-        sFreq[s[end]]++;
+        sFreq[s[p.first++]]--;
       }
       
-      sFreq = sFreqTemp;
-      sFreq[s[i]]++;
       i++;
     }
     
-    return len == INT_MAX ? "" : s.substr(ans.first, ans.second-ans.first+1);
+    return minPair.first == -1 ? "" : s.substr(minPair.first, (minPair.second - minPair.first+1));
   }
 };
-
-int main()
-{
-  Solution s;
-  s.minWindow("ADOBECODEBANC", "ABC");
-
-  return 0;
-}
