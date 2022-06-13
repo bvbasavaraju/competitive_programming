@@ -4,83 +4,80 @@ using namespace std;
 class Solution 
 {
 private:
-  bool isValid(string ip)
+  bool isValid(const string& ipByte)
   {
-    int count = 0;
-    int octate = 0;
-    string octateS = "";
-    for(char ch : ip)
+    int l = ipByte.size();
+    if(l <= 0 || l > 3 || (l > 1 && ipByte[0] == '0'))
     {
-      if(ch == '.')
-      {
-        count++;
-      }
-      
-      octateS += ch;
-      octate = octate * 10 + (ch - '0');
-      
-      if(octate > 255 || ((octateS.size() > 1) && octateS[0] == 0))
-      {
-        return false;
-      }
+      return false;
     }
     
-    // if(octate > 255 || ((octateS.size() > 1) && octateS[0] == 0))
-    // {
-    //   return false;
-    // }
-    count++;
+    int val = 0;
+    for(int ch : ipByte)
+    {
+      val = (val * 10) + (ch-'0');
+    }
     
-    return count == 4;
+    return val < 256;
   }
-  void getAllCombinations(string s, string ip, int p, int pointerCount, vector<string>& ans)
-  {
-    if(p >= s.size())
-    {
-      if(pointerCount == 3 && isValid(ip))
-      {
-        ans.push_back(ip);
-      }
-      return;
-    }
-
-    if(pointerCount == 3 && isValid(ip))
-    {
-      ans.push_back(ip);
-      return;
-    }
-
-    for(int i = p; i < s.size(); ++i)
-    {
-      ip += s[i];
-      if(pointerCount < 3)
-      {
-        ip += ".";
-        getAllCombinations(s, ip, i+1, pointerCount+1, ans);
-      }
-      else
-      {
-        getAllCombinations(s, ip, i+1, pointerCount, ans);
-      }
-      ip.pop_back();
-      //getAllCombinations(s, ip, i+1, pointerCount, ans);
-    }
-  }
+  
 public:
   vector<string> restoreIpAddresses(string s) 
   {
-    string ip;
+    int start  = 0;
+    int end = s.size();
+    
+    if(end < 4)
+    {
+      return {};
+    }
+
+    unordered_set<string> ips;
+    for(int i = start+1; i <= start+4; ++i)
+    {
+      string ipByte1 = s.substr(start, i-start);
+      if(!isValid(ipByte1))
+      {
+        break;
+      }
+      
+      for(int j = i+1; j<= i+4 && j < end; ++j)
+      {
+        string ipByte2 = s.substr(i, j-i);
+        if(!isValid(ipByte2))
+        {
+          break;
+        }
+        
+        for(int k = j+1; k <= j+4 && k < end; ++k)
+        {
+          string ipByte3 = s.substr(j, k-j);
+          if(!isValid(ipByte3))
+          {
+            break;
+          }
+          
+          //for(int l = k+1; l <= end; ++l)
+          for(int l = k+1; abs(end-l) <= 3; ++l)  // another approach!! for condition!!
+          {
+            string ipByte4 = s.substr(k);
+            if(!isValid(ipByte4))
+            {
+              break;
+            }
+            
+            ips.insert(ipByte1 + "." + ipByte2 + "." + ipByte3 + "." + ipByte4);
+          }
+        }
+      }
+    }
+    
     vector<string> ans;
-    getAllCombinations(s, ip, 0, 0, ans);
+    for(auto it = ips.begin(); it != ips.end(); ++it)
+    {
+      ans.push_back(*it);
+    }
     
     return ans;
   }
 };
-
-int main()
-{
-  Solution s;
-  s.restoreIpAddresses("25525511135");
-
-  return 0;
-}
