@@ -33,7 +33,7 @@ public:
     }
 
     unordered_set<string> ips;
-    for(int i = start+1; i <= start+4; ++i)
+    for(int i = start+1; abs(i-start) <= 3; ++i)
     {
       string ipByte1 = s.substr(start, i-start);
       if(!isValid(ipByte1))
@@ -41,7 +41,7 @@ public:
         break;
       }
       
-      for(int j = i+1; j<= i+4 && j < end; ++j)
+      for(int j = i+1; abs(j-i) <= 3 && j < end; ++j)
       {
         string ipByte2 = s.substr(i, j-i);
         if(!isValid(ipByte2))
@@ -49,7 +49,7 @@ public:
           break;
         }
         
-        for(int k = j+1; k <= j+4 && k < end; ++k)
+        for(int k = j+1; abs(k-j) <= 3 && k < end; ++k)
         {
           string ipByte3 = s.substr(j, k-j);
           if(!isValid(ipByte3))
@@ -58,7 +58,7 @@ public:
           }
           
           //for(int l = k+1; l <= end; ++l)
-          for(int l = k+1; abs(end-l) <= 3; ++l)  // another approach!! for condition!!
+          for(int l = k+1; abs(end-l) <= 3; ++l)
           {
             string ipByte4 = s.substr(k);
             if(!isValid(ipByte4))
