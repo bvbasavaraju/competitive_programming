@@ -6,7 +6,7 @@ Memory exhausted : 0
 Not Solved : 0
 Wrong Answer/ Partial result : 2
 
-link: https://leetcode.com/contest/weekly-contest-296
+link: https://leetcode.com/contest/weekly-contest-297
 ****************************************************/
 
 #include<bits/stdc++.h>
