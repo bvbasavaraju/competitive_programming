@@ -1,41 +1,33 @@
-/*
-    Q: 3. Longest Substring Without Repeating Characters
-*/
-
-#include <iostream>
-#include <stdint.h>
-#include <math.h>
-#include <string>
-#include <map>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-class Solution
+class Solution 
 {
 public:
-    int lengthOfLongestSubstring(string s)
+  int lengthOfLongestSubstring(string s) 
+  {
+    int ans = 0;
+    int l = s.size();
+    for(int i = 0; i < l; ++i)
     {
-        int retVal = 0;
-        int l = s.size();
-        for (int j = 0; j < l; j++)
+      vector<int> freq(128, 0);
+      
+      int len = 1;
+      freq[s[i]]++;
+      for(int j = i+1; j < l; ++j)
+      {
+        if(freq[s[j]] != 0)
         {
-            map<int, int> m;
-            int curMax = 0;
-            for (int i = j; i < l; i++)
-            {
-                m[s[i]]++;
-                if (m[s[i]] > 1)
-                {
-                    break;
-                }
-                else
-                {
-                    curMax++;
-                }
-
-                retVal = max(curMax, retVal);
-            }
+          break;
         }
-        return retVal;
+        
+        len++;
+        freq[s[j]]++;
+      }
+      
+      ans = max(ans, len);
     }
+    
+    return ans;
+  }
 };

@@ -1,79 +1,50 @@
-/*
-    5. Longest Palindromic Substring
-
-    Given a string s, find the longest palindromic substring in s. You may assume that the maximum length of s is 1000.
-
-    Example 1:
-    Input: "babad"
-    Output: "bab"
-    Note: "aba" is also a valid answer.
-    
-    Input: "cbbd"
-    Output: "bb"
-*/
-
-#include <iostream>
-#include <string>
-
+#include<bits/stdc++.h>
 using namespace std;
-class Solution
+
+class Solution 
 {
-private:
-    bool IsPalindrome(const string &source, int firstIndex, int lastIndex, string &result)
+private:  
+  pair<int, int> getLongestPalindome(const string& s, int l, int r)
+  {
+    pair<int, int> ans = {0, 0};
+    while(l >= 0 && r < s.size() && s[l] == s[r])
     {
-        bool retVal = true;
-        int f = firstIndex;
-        int l = lastIndex;
-        while (f <= l)
-        {
-            if (source[f] != source[l])
-            {
-                retVal = false;
-                break;
-            }
-
-            f++;
-            l--;
-        }
-
-        if (retVal)
-        {
-            result = source.substr(firstIndex, (lastIndex - firstIndex + 1));
-        }
-
-        return retVal;
+      ans = {l, r};
+      l--;
+      r++;
     }
-
+    
+    return ans;
+  }
+  
 public:
-    string longestPalindrome(string s)
+  string longestPalindrome(string s) 
+  {
+    int l = s.size();
+    
+    pair<int, int> maxi = {0, 0};
+    for(int i = 0; i < l; ++i)
     {
-        string retVal;
-        int l = s.size();
-        for (int i = 0; i < l; i++)
+      pair<int, int> p1 = getLongestPalindome(s, i, i);
+      pair<int, int> p2 = getLongestPalindome(s, i, i+1);
+            
+      if((p1.second - p1.first) >= p2.second - p2.first)
+      {
+        if((p1.second - p1.first) > (maxi.second - maxi.first))
         {
-            for (int j = (i + 1); j < l; j++)
-            {
-                if (s[i] == s[j])
-                {
-                    string subStr;
-                    if (IsPalindrome(s, i, j, subStr))
-                    {
-                        retVal = (retVal.size() >= subStr.size()) ? retVal : subStr;
-                    }
-                }
-            }
-
-            if (retVal.size() == l)
-            {
-                break;
-            }
+          maxi = p1; 
         }
-
-        if (retVal.empty() && (l > 0))
+      }
+      else
+      {
+        if((p2.second - p2.first) > (maxi.second - maxi.first))
         {
-            retVal = s.substr(0, 1);
+          maxi = p2; 
         }
-
-        return retVal;
+      }
     }
+    
+    
+    return s.substr(maxi.first, maxi.second - maxi.first + 1);
+  }
 };
