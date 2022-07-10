@@ -6,6 +6,8 @@ Memory exhausted : 0
 Not Solved : 3
 Wrong Answer/ Partial result : 0
 
+Note: 2 questions solved after contest! after checking other's solutions!!
+
 link: https://leetcode.com/contest/weekly-contest-301
 ****************************************************/
 
@@ -110,81 +112,60 @@ public:
  */
 
 /*
-  Q: 2337. Move Pieces to Obtain a String
+  Q: 2337. Move Pieces to Obtain a String - Sovled after looking into solution!
 */
-class Solution3_t
+class Solution 
 {
-private:
-  bool canBeFormed(string& s, const string& t, int l, int r)
+public:
+  bool canChange(string start, string target) 
   {
-    if(l > r)
+    int l = target.size();
+    queue<pair<char, int>> sq;
+    queue<pair<char, int>> tq;
+    for(int i = 0; i < l; ++i)
+    {
+      if(start[i] != '_')
+      {
+        sq.push({start[i], i});
+      }
+      if(target[i] != '_')
+      {
+        tq.push({target[i], i});
+      }
+    }
+    
+    if(sq.size() != tq.size())
     {
       return false;
     }
     
-    if(l == r)
+    while(!sq.empty() && !tq.empty())
     {
-      return (s[l] == t[l]) ? true : false;
-    }
-    
-    if(t[r] == 'R')
-    {
-      int tempr = r;
-      while((s[tempr] != t[r]) && (l < r))
+      pair<char, int> s = sq.front();
+      pair<char, int> t = tq.front();
+      
+      sq.pop();
+      tq.pop();
+      
+      if(s.first != t.first)
       {
-        stack<pair<char, int>> str;
-        if(s[tempr] == t[r])
-        {
-          while(!str.empty())
-          {
-            if(str.top().first == '_')
-            {
-              pos = str.top().second;
-              str.pop();
-              
-            }
-          }
-        }
-        else
-        {
-          str.push(s[tempr], tempr);
-          tempr--;
-        }
+        return false;
       }
-    }
-    
-    //Mem
-    
-    if(s[l] == t[l] && s[])
-    {
-      return canBeFormed(s, t, ps+1, pt+1);
-    }
-    
-    if(t[pt] == 'L')
-    {
-      if((ps > 0) && (s[ps-1] == 'L') && (s[ps] == '_'))
+      
+      if(s.first == 'L' && t.second > s.second)
       {
-        s[ps] = 'L';
-        s[ps+1] = '_';
-        return canBeFormed(s, t, ps+1, pt+1);
+        return false;
       }
-      else
+      
+      else if(s.first == 'R' && t.second < s.second)
       {
         return false;
       }
     }
-    else if(t[pt] == '_')
-    {
-      if((ps < s.size()-1) && (s[ps+1] == '_') && (s[ps] == 'R'))
-      {
-        s[ps] = '_';
-        s[ps+1] = 'R';
-        
-        return canBeFormed(s, t, ps+1, pt+1);
-      }
-    }
     
+    return true;
   }
+};
 public:
   bool canChange(string start, string target) 
   {
