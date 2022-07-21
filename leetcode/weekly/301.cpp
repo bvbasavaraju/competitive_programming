@@ -1,6 +1,6 @@
 /****************************************************
-Date: July 11th, 2022
-Successful submissions : `
+Date: July 10th, 2022
+Successful submissions : 1
 Time expiration : 0
 Memory exhausted : 0
 Not Solved : 3
