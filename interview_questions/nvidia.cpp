@@ -168,3 +168,147 @@ int main(){
     strncat(fullname, lastname, 20); // firstname will get overwritten
     return 0;
 }
+
+//oral interview!
+#include<iostream>
+
+template <typename T>
+class MyUniquePtr_t
+{
+private:
+  T* ptr;
+  int count;
+  MyUniquePtr_t(void) : ptr(nullptr), count(0) {}
+
+  public:
+    MyUniquePtr_t(T val) 
+    {
+      ptr = new T(val);
+      count++;
+    }
+
+    MyUniquePtr_t(T* ptr_) : ptr(ptr_) 
+    {}
+
+    ~MyUniquePtr_t()
+    {
+      delete ptr;
+    }
+
+    bool IsSet(void) const 
+    {
+      return ptr != nullptr;
+    }
+
+    void TransferOwnership(MyUniquePtr_t& dest)
+    {
+      if(dest.ptr != nullptr)
+      {
+        return;
+      }
+
+      dest.ptr = ptr;
+      ptr = nullptr;
+    }
+
+    const T operator*(void) const
+    {
+      return *ptr;
+    }
+
+    T& operator*(void)
+    {
+      return &*ptr;
+    }
+
+    T operator->(void) const
+    {
+
+    }
+};
+
+#include<bits/stdc++.h>
+using namespace std;
+
+struct Node_t
+{
+  int val;
+  Node_t* next;
+  Node_t(int val_) : val (val_), next(nullptr) {}
+};
+
+class ListValidity_t
+{
+private:
+  bool isThereALoop(Node_t* node)
+  {
+    if(node == nullptr || node->next == nullptr)
+    {
+      return false;
+    }
+    
+    Node_t* slow = node;
+    Node_t* fast = node->next;
+    while(fast != nullptr /*&& slow != nullptr*/)
+    {
+      // length of loop = 10; 
+      // fast -> 2 hops!!
+      // length + 2 -> pointers matches -> (12)
+      //a->b->c->d->e->f->g->h->i->j->k->l->b
+      
+      // length of loop = 9; 
+      // fast -> 2 hops!!
+      // length + 2 -> pointers matches -> (12)
+      //a->b->c->d->e->f->g->h->i->j->k->b
+      if(fast == slow)
+      {
+        return true;
+      }
+
+      slow = slow->next;
+      if(fast->next == nullptr /*|| fast->next->next == nullptr*/)
+      {
+        break;
+      }
+      fast = fast->next->next;
+    }
+
+    return false;
+  }
+public:
+  bool IsListLoopedBack(Node_t* root)
+  {
+    return isThereALoop(root);
+  }
+
+  void FixIfThereIsALoop(Node_t* root)
+  {
+    if(!isThereALoop(root))
+    {
+      return;
+    }
+
+
+  }
+};
+
+int main()
+{
+  std::shared_ptr<int> shareptr1 = std::make_shared(new int(10));
+  std::shared_ptr<int> shareptr2 = shareptr2;
+
+
+  shareptr1 = nullptr;
+  //shareptr2 = nullptr;
+
+  std::unique_ptr<int> uniquePtr1 = new int(11);
+  std::unique_ptr<int> uniquePtr2 = std::move(uniquePtr1);
+
+  int a = 10;
+  int b = a;
+
+  std::string s = "temp";
+  std::string s2 = s1;
+
+  //uniquePtr1 -> no more valid!!
+}
