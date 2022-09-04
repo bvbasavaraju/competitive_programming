@@ -6,8 +6,8 @@ Time expiration : 0
 Memory exhausted : 0
 Not Solved : 0
 Incomplete Solution : 1
-Wrong Answer/ Partial result : 1
-Solved looking at solutions : 0
+Wrong Answer/ Partial result : 0
+Solved looking at solutions : 1
 
 link: https://leetcode.com/contest/weekly-contest-309
 ****************************************************/
@@ -147,28 +147,20 @@ public:
 };
 
 /*
-  Q: 2402. Meeting Rooms III - partial result. by that time I completed it, time was up already!!
+  Q: 2402. Meeting Rooms III - answered after looking into solution
 */
 class Solution4_t
 {
 public:
   int mostBooked(int n, vector<vector<int>>& meetings) 
   {
-    sort(meetings.begin(), meetings.end(), [](const vector<int>& t1, const vector<int>& t2) -> bool
-         {
-           if((t1[0] < t2[0]) || ((t1[0] == t2[0]) && (t1[1] < t2[1])))
-           {
-             return true;
-           }
-           
-           return false;
-         });
+    sort(meetings.begin(), meetings.end());
         
     int l = n;
     vector<int> count(n, 0);
-    vector<int> endTime(n, 0);
+    vector<long long> endTime(n, 0);
     priority_queue<int, vector<int>, greater<int>> rooms;
-    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> endTimeWithRoomNumber;
+    priority_queue<pair<long long, int>, vector<pair<long long, int>>, greater<pair<long long, int>>> endTimeWithRoomNumber;
     
     while(n > 0)
     {
@@ -178,11 +170,22 @@ public:
 
     for(vector<int> time : meetings)
     {
-      if(rooms.empty())
+      //Remove all rooms which are done with meetings!!
+      while(!endTimeWithRoomNumber.empty() && endTimeWithRoomNumber.top().first <= time[0])
       {
-        pair<int, int> roomAndET = endTimeWithRoomNumber.top();
+        pair<long long, int> roomAndET = endTimeWithRoomNumber.top();
         endTimeWithRoomNumber.pop();
         
+        rooms.push(roomAndET.second);
+      }
+      
+      long long startTime = time[0];  // by default current start is the start time.
+      if(rooms.empty())
+      {
+        pair<long long, int> roomAndET = endTimeWithRoomNumber.top();
+        endTimeWithRoomNumber.pop();
+        
+        startTime = roomAndET.first; //But there is a possibility that as rooms are not availble, we need to start later than current start time!! Hence need to update the start time!!
         rooms.push(roomAndET.second);
       }
       
@@ -190,7 +193,8 @@ public:
       rooms.pop();
       
       count[room]++;
-      endTime[room] += time[1];
+      //endTime[room] += time[1];
+      endTime[room] = startTime + (time[1] - time[0]);
       endTimeWithRoomNumber.push({endTime[room], room});
     }
     
